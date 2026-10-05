@@ -1,0 +1,787 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #eef7ed;
+  color: #1f2d1f;
+}
+
+button {
+  font-family: inherit;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+.header {
+  padding: 40px 20px;
+  text-align: center;
+  background: white;
+  border-bottom: 1px solid #dce8d9;
+}
+
+.header h1 {
+  font-size: 42px;
+  color: #2e7d32;
+  margin-bottom: 8px;
+}
+
+.header p {
+  font-size: 18px;
+  color: #687568;
+}
+
+.botao-sair {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #e53935;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.botao-sair:hover {
+  background: #c62828;
+  transform: translateY(-2px);
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard {
+  width: min(1100px, 90%);
+  margin: 45px auto;
+}
+
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow:
+    0 10px 30px
+    rgba(40, 80, 40, 0.08);
+  text-align: center;
+}
+
+.plantas-card {
+  width: 100%;
+}
+
+/* =========================
+   TÍTULO DAS PLANTAS
+========================= */
+
+.titulo-plantas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+}
+
+.titulo-plantas h2 {
+  margin-bottom: 5px;
+  font-size: 24px;
+}
+
+.titulo-plantas p {
+  color: #788178;
+}
+
+/* =========================
+   BOTÃO ADICIONAR
+========================= */
+
+.botao-adicionar-planta {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 10px;
+  background: #2e7d32;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.botao-adicionar-planta:hover {
+  background: #256b29;
+  transform: translateY(-2px);
+}
+
+/* =========================
+   FORMULÁRIO DE PLANTA
+========================= */
+
+.formulario-planta {
+  margin-top: 25px;
+  padding: 25px;
+  background: #f5faf4;
+  border: 1px solid #dce8d9;
+  border-radius: 16px;
+  text-align: left;
+}
+
+.formulario-planta h3 {
+  color: #2e7d32;
+  margin-bottom: 18px;
+  font-size: 20px;
+}
+
+.formulario-planta input,
+.formulario-planta select {
+  width: 100%;
+  padding: 13px 14px;
+  margin-bottom: 12px;
+  border: 1px solid #cfdacf;
+  border-radius: 10px;
+  background: white;
+  color: #1f2d1f;
+  font-size: 14px;
+  outline: none;
+}
+
+.formulario-planta input:focus,
+.formulario-planta select:focus {
+  border-color: #2e7d32;
+}
+
+.botoes-formulario {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.botao-salvar-planta,
+.botao-cancelar-planta {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.botao-salvar-planta {
+  background: #2e7d32;
+  color: white;
+}
+
+.botao-salvar-planta:hover {
+  background: #256b29;
+}
+
+.botao-cancelar-planta {
+  background: #e0e0e0;
+  color: #555;
+}
+
+.botao-cancelar-planta:hover {
+  background: #d0d0d0;
+}
+
+/* =========================
+   PAINEL DA PLANTA
+========================= */
+
+.painel-planta {
+  margin-top: 25px;
+  margin-bottom: 30px;
+  background: #f5faf4;
+  border: 2px solid #2e7d32;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 15px 35px
+    rgba(46, 125, 50, 0.15);
+  animation: aparecer 0.3s ease;
+}
+
+.painel-imagem {
+  padding: 30px;
+  font-size: 90px;
+  text-align: center;
+  background: #eaf5e8;
+}
+
+.painel-conteudo {
+  padding: 30px;
+  width: 100%;
+  min-width: 0;
+}
+
+.painel-titulo {
+  text-align: left;
+  margin-bottom: 25px;
+}
+
+.painel-titulo h2 {
+  color: #2e7d32;
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.painel-titulo p {
+  color: #687568;
+  line-height: 1.6;
+}
+
+/* =========================
+   UMIDADE
+========================= */
+
+.painel-umidade {
+  margin-bottom: 20px;
+}
+
+.umidade-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.umidade-topo span {
+  color: #687568;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* NÚMERO DA UMIDADE */
+
+.porcentagem-umidade {
+  font-size: 22px;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+/* BARRA */
+
+.barra-planta {
+  width: 100%;
+  height: 12px;
+  background: #dce8d9;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.barra-planta-progresso {
+  height: 100%;
+  border-radius: 20px;
+  transition:
+    width 0.5s ease,
+    background 0.3s ease;
+}
+
+.painel-umidade small {
+  display: block;
+  margin-top: 8px;
+  color: #899489;
+  text-align: left;
+}
+
+/* =========================
+   STATUS DA UMIDADE
+========================= */
+
+.status-umidade {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 7px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.status-umidade.umidade-baixa {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.status-umidade.umidade-media {
+  background: #fff8e1;
+  color: #f57f17;
+}
+
+.status-umidade.umidade-boa {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* =========================
+   IRRIGAÇÃO
+========================= */
+
+.controle-irrigacao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px;
+  border-radius: 14px;
+  margin-bottom: 18px;
+}
+
+.controle-ligado {
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+}
+
+.controle-desligado {
+  background: #f5f5f5;
+  border: 1px solid #dddddd;
+}
+
+.controle-info {
+  text-align: left;
+}
+
+.controle-titulo {
+  font-size: 13px;
+  color: #687568;
+  margin-bottom: 5px;
+}
+
+.controle-info strong {
+  font-size: 17px;
+}
+
+.controle-ligado strong {
+  color: #2e7d32;
+}
+
+.controle-desligado strong {
+  color: #777777;
+}
+
+.botao-controle {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.botao-controle:hover {
+  transform: translateY(-2px);
+}
+
+.controle-ligado .botao-controle {
+  background: #e53935;
+  color: white;
+}
+
+.controle-desligado .botao-controle {
+  background: #2e7d32;
+  color: white;
+}
+
+/* =========================
+   STATUS DO SISTEMA
+========================= */
+
+.status-planta {
+  padding: 14px;
+  border-radius: 12px;
+  text-align: left;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+.status-planta-ok {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-planta span {
+  margin-right: 8px;
+}
+
+/* =========================
+   INFORMAÇÕES DA PLANTA
+========================= */
+
+.informacoes-planta-selecionada {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  margin-top: 30px;
+  padding-top: 25px;
+  border-top: 1px solid #dce8d9;
+}
+
+.info-item {
+  padding: 5px 25px;
+  text-align: center;
+  border-right: 1px solid #dce8d9;
+}
+
+.info-item:last-child {
+  border-right: none;
+}
+
+.info-item > span {
+  display: block;
+  color: #718071;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 8px;
+}
+
+.info-item strong {
+  display: block;
+  color: #2e7d32;
+  font-size: 21px;
+  margin-bottom: 5px;
+  line-height: 1.3;
+}
+
+.info-item small {
+  display: block;
+  color: #9aa59a;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* =========================
+   LISTA DE PLANTAS
+========================= */
+
+.lista-plantas {
+  margin-top: 25px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  text-align: left;
+}
+
+.planta-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px;
+  background: #f8fbf7;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.planta-card:hover {
+  transform: translateY(-3px);
+  border-color: #a5d6a7;
+  box-shadow:
+    0 8px 20px
+    rgba(40, 80, 40, 0.08);
+}
+
+.planta-card-selecionada {
+  border-color: #2e7d32;
+  background: #eef8ed;
+}
+
+.imagem-planta {
+  width: 65px;
+  height: 65px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e8f5e9;
+  border-radius: 14px;
+  font-size: 38px;
+}
+
+.informacoes-planta {
+  min-width: 0;
+}
+
+.informacoes-planta h3 {
+  color: #2e7d32;
+  margin-bottom: 6px;
+  font-size: 18px;
+}
+
+.descricao {
+  color: #788178;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* =========================
+   AÇÕES DA PLANTA
+========================= */
+
+.area-acoes-planta {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #dce8d9;
+}
+
+.botao-editar-planta {
+  padding: 11px 18px;
+  border: 1px solid #a5d6a7;
+  border-radius: 10px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.botao-editar-planta:hover {
+  background: #c8e6c9;
+  transform: translateY(-2px);
+}
+
+.botao-excluir-planta {
+  padding: 11px 18px;
+  border: 1px solid #ef9a9a;
+  border-radius: 10px;
+  background: #ffebee;
+  color: #c62828;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.botao-excluir-planta:hover {
+  background: #ffcdd2;
+  border-color: #e57373;
+  transform: translateY(-2px);
+}
+
+/* =========================
+   FORMULÁRIO DE EDIÇÃO
+========================= */
+
+.formulario-edicao {
+  text-align: left;
+  margin-bottom: 25px;
+}
+
+.formulario-edicao h3 {
+  color: #2e7d32;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.formulario-edicao label {
+  display: block;
+  margin-bottom: 6px;
+  color: #687568;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.formulario-edicao input,
+.formulario-edicao select {
+  width: 100%;
+  padding: 13px 14px;
+  margin-bottom: 15px;
+  border: 1px solid #cfdacf;
+  border-radius: 10px;
+  background: white;
+  color: #1f2d1f;
+  font-size: 14px;
+  outline: none;
+}
+
+.formulario-edicao input:focus,
+.formulario-edicao select:focus {
+  border-color: #2e7d32;
+}
+
+.botoes-edicao {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.botao-salvar-edicao,
+.botao-cancelar-edicao {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.botao-salvar-edicao {
+  background: #2e7d32;
+  color: white;
+}
+
+.botao-salvar-edicao:hover {
+  background: #256b29;
+}
+
+.botao-cancelar-edicao {
+  background: #e0e0e0;
+  color: #555;
+}
+
+.botao-cancelar-edicao:hover {
+  background: #d0d0d0;
+}
+
+/* =========================
+   NENHUMA PLANTA
+========================= */
+
+.sem-plantas {
+  grid-column: 1 / -1;
+  padding: 40px 20px;
+  text-align: center;
+  background: #f8fbf7;
+  border-radius: 16px;
+  border: 1px dashed #c8d8c5;
+}
+
+.sem-plantas h3 {
+  color: #2e7d32;
+  margin-bottom: 8px;
+}
+
+.sem-plantas p {
+  color: #788178;
+}
+
+/* =========================
+   ANIMAÇÃO
+========================= */
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 700px) {
+
+  .header {
+    padding: 30px 15px;
+  }
+
+  .header h1 {
+    font-size: 34px;
+  }
+
+  .dashboard {
+    width: 94%;
+    margin: 25px auto;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .titulo-plantas {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .botao-adicionar-planta {
+    width: 100%;
+  }
+
+  .painel-imagem {
+    font-size: 70px;
+    padding: 25px;
+  }
+
+  .painel-conteudo {
+    padding: 20px;
+  }
+
+  .controle-irrigacao {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .botao-controle {
+    width: 100%;
+  }
+
+  .informacoes-planta-selecionada {
+    grid-template-columns: 1fr;
+  }
+
+  .info-item {
+    padding: 15px;
+    border-right: none;
+    border-bottom: 1px solid #dce8d9;
+  }
+
+  .info-item:last-child {
+    border-bottom: none;
+  }
+
+  .lista-plantas {
+    grid-template-columns: 1fr;
+  }
+
+  .planta-card {
+    padding: 15px;
+  }
+
+  .botoes-formulario {
+    flex-direction: column;
+  }
+
+  .botao-salvar-planta,
+  .botao-cancelar-planta {
+    width: 100%;
+  }
+
+  .area-acoes-planta {
+    flex-direction: column;
+  }
+
+  .botao-editar-planta,
+  .botao-excluir-planta {
+    width: 100%;
+  }
+
+  .botoes-edicao {
+    flex-direction: column;
+  }
+
+  .botao-salvar-edicao,
+  .botao-cancelar-edicao {
+    width: 100%;
+  }
+}

@@ -1,0 +1,183 @@
+.cadastro-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 20px;
+
+  background:
+    radial-gradient(
+      circle at top,
+      #dff5df,
+      transparent 45%
+    ),
+    #eef7ed;
+}
+
+.cadastro-container {
+  width: min(450px, 100%);
+  background: white;
+  padding: 40px;
+  border-radius: 24px;
+
+  box-shadow:
+    0 20px 50px
+    rgba(40, 80, 40, 0.12);
+}
+
+.cadastro-logo {
+  width: 70px;
+  height: 70px;
+
+  margin: 0 auto 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 20px;
+
+  background: #e8f5e9;
+
+  font-size: 38px;
+}
+
+.cadastro-container h1 {
+  text-align: center;
+
+  color: #2e7d32;
+
+  font-size: 36px;
+
+  margin-bottom: 8px;
+}
+
+.cadastro-subtitulo {
+  text-align: center;
+
+  color: #718071;
+
+  line-height: 1.5;
+
+  margin-bottom: 30px;
+}
+
+.campo {
+  margin-bottom: 20px;
+}
+
+.campo label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #354535;
+
+  font-weight: bold;
+
+  font-size: 14px;
+}
+
+.campo input {
+  width: 100%;
+
+  padding: 14px 15px;
+
+  border: 1px solid #d5e1d3;
+
+  border-radius: 12px;
+
+  background: #fafdfa;
+
+  font-size: 16px;
+
+  outline: none;
+
+  transition: 0.2s;
+}
+
+.campo input:focus {
+  border-color: #4caf50;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(76, 175, 80, 0.12);
+}
+
+.campo input::placeholder {
+  color: #9aa59a;
+}
+
+.botao-cadastro {
+  width: 100%;
+
+  border: none;
+
+  padding: 15px;
+
+  margin-top: 5px;
+
+  border-radius: 12px;
+
+  background: #2e7d32;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.botao-cadastro:hover {
+  background: #256528;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 18px
+    rgba(46, 125, 50, 0.2);
+}
+
+.login-link {
+  margin-top: 25px;
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  font-size: 14px;
+
+  color: #718071;
+}
+
+.login-link button {
+  border: none;
+
+  background: transparent;
+
+  color: #2e7d32;
+
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.login-link button:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 500px) {
+  .cadastro-container {
+    padding: 30px 22px;
+  }
+
+  .cadastro-container h1 {
+    font-size: 32px;
+  }
+}
