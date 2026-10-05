@@ -1,16 +1,50 @@
-# React + Vite
+# PlantaPet
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Sistema de irrigação inteligente para plantas, desenvolvido para monitorar a umidade do solo e integrar sensores físicos a uma aplicação web.
 
-Currently, two official plugins are available:
+## Tecnologias utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Front-end
 
-## React Compiler
+* React
+* Vite
+* JavaScript
+* CSS
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### IoT e automação
 
-## Expanding the Oxlint configuration
+* ESP32
+* Arduino IDE
+* Sensor de umidade do solo
+* MQTT
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+### Comunicação
+
+O ESP32 realiza a leitura da umidade do solo e envia os dados através do protocolo MQTT para o sistema.
+
+## Funcionamento
+
+1. O sensor de umidade realiza a leitura do solo.
+2. O ESP32 processa a leitura e converte o valor para porcentagem.
+3. O ESP32 publica os dados através do MQTT.
+4. A aplicação Plantapet recebe e apresenta as informações de umidade.
+5. O sistema permite acompanhar o estado da planta através da interface web.
+
+## Hardware
+
+* ESP32
+* Sensor de umidade do solo
+* Computador para desenvolvimento
+* Arduino IDE
+
+## MQTT
+
+O ESP32 utiliza MQTT para comunicação com o broker.
+
+Tópico utilizado no projeto:
+
+`PSA/Executivo/AutomacaoPredial/irrigador/jardineira1`
+
+## Objetivo
+
+Criar um sistema de monitoramento e irrigação inteligente, integrando desenvolvimento web, Internet das Coisas (IoT) e automação.
