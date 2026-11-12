@@ -18,10 +18,6 @@ button {
   min-height: 100vh;
 }
 
-/* =========================
-   CABEÇALHO
-========================= */
-
 .header {
   padding: 40px 20px;
   text-align: center;
@@ -491,8 +487,8 @@ button {
 }
 
 .planta-card-selecionada {
-  border-color: #2e7d32;
-  background: #eef8ed;
+  border-color: #256b29;
+  background: #e4f3e2;
 }
 
 .imagem-planta {
@@ -783,5 +779,97 @@ button {
   .botao-salvar-edicao,
   .botao-cancelar-edicao {
     width: 100%;
+  }
+}
+
+
+/* =========================
+   LAYOUT PRINCIPAL COM IA
+========================= */
+
+.dashboard {
+  width: min(1500px, 96%);
+  margin: 35px auto;
+}
+
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(340px, 0.85fr);
+  align-items: start;
+  gap: 22px;
+}
+
+.plantas-card {
+  min-width: 0;
+}
+
+.dashboard-assistente {
+  min-width: 0;
+  position: sticky;
+  top: 20px;
+}
+
+.dashboard-assistente .assistente-container {
+  margin-top: 0;
+}
+
+.dashboard-assistente .assistente-mensagens {
+  height: min(55vh, 520px);
+  min-height: 360px;
+}
+
+.dashboard-assistente .assistente-contexto {
+  margin-top: 12px;
+}
+
+.titulo-plantas {
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.botao-adicionar-planta {
+  white-space: nowrap;
+}
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 1000px) {
+  .dashboard-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dashboard-assistente {
+    position: static;
+    width: 100%;
+  }
+
+  .dashboard-assistente .assistente-mensagens {
+    height: 400px;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard {
+    width: 94%;
+    margin: 20px auto;
+  }
+
+  .dashboard-layout {
+    gap: 18px;
+  }
+
+  .titulo-plantas {
+    align-items: stretch;
+  }
+
+  .botao-adicionar-planta {
+    width: 100%;
+  }
+
+  .dashboard-assistente .assistente-mensagens {
+    height: 350px;
+    min-height: 300px;
   }
 }

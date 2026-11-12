@@ -1,4 +1,7 @@
+
 import { useEffect, useState } from "react";
+import { supabase } from "./lib/supabase";
+import AssistenteIA from "./AssistenteIA";
 import "./App.css";
 
 const tiposDePlantas = {
@@ -6,154 +9,130 @@ const tiposDePlantas = {
     imagem: "🌿",
     umidade: "50% - 70%",
     rega: "Frequente",
-    descricao:
-      "Gosta de ambientes úmidos e precisa de rega frequente.",
+    descricao: "Gosta de ambientes úmidos e precisa de rega frequente.",
   },
-
   Flor: {
     imagem: "🌸",
     umidade: "40% - 60%",
     rega: "Moderada",
-    descricao:
-      "Precisa de uma rega equilibrada para manter o solo saudável.",
+    descricao: "Precisa de uma rega equilibrada para manter o solo saudável.",
   },
-
-  "Árvore": {
+  Árvore: {
     imagem: "🌳",
     umidade: "40% - 60%",
     rega: "Moderada",
-    descricao:
-      "Árvores precisam de espaço e umidade controlada no solo.",
+    descricao: "Árvores precisam de espaço e umidade controlada no solo.",
   },
-
   Suculenta: {
     imagem: "🪴",
     umidade: "20% - 40%",
     rega: "Pouca",
-    descricao:
-      "Armazena água nas folhas e não deve permanecer com o solo encharcado.",
+    descricao: "Armazena água nas folhas e não deve permanecer com o solo encharcado.",
   },
-
   Folhagem: {
     imagem: "🍃",
     umidade: "40% - 60%",
     rega: "Moderada",
-    descricao:
-      "Gosta de umidade equilibrada e de regas moderadas.",
+    descricao: "Gosta de umidade equilibrada e de regas moderadas.",
   },
-
   Cacto: {
     imagem: "🌵",
     umidade: "15% - 30%",
     rega: "Pouca",
-    descricao:
-      "Armazena água e precisa de pouca rega para se manter saudável.",
+    descricao: "Armazena água e precisa de pouca rega para se manter saudável.",
   },
 };
 
 function Plantapet({ usuario, aoSair }) {
   const [umidade, setUmidade] = useState(0);
-
   const [irrigando, setIrrigando] = useState(false);
 
   const [plantas, setPlantas] = useState([]);
+  const [carregandoPlantas, setCarregandoPlantas] = useState(true);
+  const [mensagemPlantas, setMensagemPlantas] = useState("");
+  const [tipoMensagemPlantas, setTipoMensagemPlantas] = useState("erro");
 
-  const [plantaSelecionada, setPlantaSelecionada] =
-    useState(null);
+  const [plantaSelecionada, setPlantaSelecionada] = useState(null);
+  const [mostrarCadastro, setMostrarCadastro] = useState(false);
 
-  const [mostrarCadastro, setMostrarCadastro] =
-    useState(false);
+  const [nomeNovaPlanta, setNomeNovaPlanta] = useState("");
+  const [tipoNovaPlanta, setTipoNovaPlanta] = useState("Samambaia");
 
-  const [nomeNovaPlanta, setNomeNovaPlanta] =
-    useState("");
+  const [editandoPlanta, setEditandoPlanta] = useState(false);
+  const [nomeEditado, setNomeEditado] = useState("");
+  const [tipoEditado, setTipoEditado] = useState("Samambaia");
 
-  const [tipoNovaPlanta, setTipoNovaPlanta] =
-    useState("Samambaia");
+  // =========================
+  // SENSOR ESP32
+  // =========================
 
-  const [editandoPlanta, setEditandoPlanta] =
-    useState(false);
+  useEffect(() => {
+    async function buscarUmidadeESP32() {
+      try {
+        const resposta = await fetch("http://172.24.3.237/umidade");
 
-  const [nomeEditado, setNomeEditado] =
-    useState("");
+        if (!resposta.ok) {
+          throw new Error("Erro ao buscar umidade do ESP32");
+        }
 
-  const [tipoEditado, setTipoEditado] =
-    useState("Samambaia");
+        const dados = await resposta.json();
+        const leitura = Number(dados.umidade);
 
-
-
- useEffect(() => {
-  async function buscarUmidadeESP32() {
-    try {
-      const resposta = await fetch(
-        "http://172.24.3.237/umidade"
-      );
-
-      if (!resposta.ok) {
-        throw new Error("Erro ao buscar umidade do ESP32");
+        if (Number.isFinite(leitura) && leitura >= 0 && leitura <= 100) {
+          setUmidade(leitura);
+        }
+      } catch (erro) {
+        console.error("Erro ao conectar com o ESP32:", erro);
       }
-
-      const dados = await resposta.json();
-
-      setUmidade(dados.umidade);
-
-      console.log(
-        "Umidade recebida do ESP32:",
-        dados.umidade
-      );
-    } catch (erro) {
-      console.error(
-        "Erro ao conectar com o ESP32:",
-        erro
-      );
     }
-  }
 
-  buscarUmidadeESP32();
+    buscarUmidadeESP32();
 
-  const intervalo = setInterval(
-    buscarUmidadeESP32,
-    3000
-  );
+    const intervalo = setInterval(buscarUmidadeESP32, 3000);
 
-  return () => clearInterval(intervalo);
-}, []);
-   
+    return () => clearInterval(intervalo);
+  }, []);
+
   // =========================
   // BUSCAR PLANTAS
   // =========================
 
   useEffect(() => {
+    let ativo = true;
+
     async function buscarPlantas() {
+      setCarregandoPlantas(true);
+
       try {
-        const resposta = await fetch(
-          "http://localhost:3001/plantas"
-        );
+        const { data, error } = await supabase
+          .from("plantas")
+          .select("*")
+          .eq("usuario_id", usuario.id);
 
-        if (!resposta.ok) {
-          throw new Error(
-            "Erro ao buscar plantas"
-          );
-        }
+        if (error) throw error;
+        if (!ativo) return;
 
-        const todasAsPlantas =
-          await resposta.json();
-
-        const plantasDoUsuario =
-          todasAsPlantas.filter(
-            (planta) =>
-              planta.usuarioId === usuario.id
-          );
-
-        setPlantas(plantasDoUsuario);
+        setPlantas(data ?? []);
+        setMensagemPlantas("");
       } catch (erro) {
-        console.error(
-          "Erro ao buscar plantas:",
-          erro
-        );
+        console.error("Erro ao buscar plantas:", erro);
+
+        if (ativo) {
+          setMensagemPlantas(
+            "Não foi possível carregar suas plantas. Tente novamente."
+          );
+          setTipoMensagemPlantas("erro");
+        }
+      } finally {
+        if (ativo) setCarregandoPlantas(false);
       }
     }
 
     buscarPlantas();
+
+    return () => {
+      ativo = false;
+    };
   }, [usuario.id]);
 
   // =========================
@@ -171,9 +150,7 @@ function Plantapet({ usuario, aoSair }) {
   // =========================
 
   function alternarIrrigacao() {
-    setIrrigando(
-      (estadoAtual) => !estadoAtual
-    );
+    setIrrigando((estadoAtual) => !estadoAtual);
   }
 
   // =========================
@@ -201,45 +178,25 @@ function Plantapet({ usuario, aoSair }) {
     };
   }
 
-  const statusUmidade =
-    obterStatusUmidade();
-
-  // =========================
-  // COR DA UMIDADE
-  // =========================
+  const statusUmidade = obterStatusUmidade();
 
   function obterCorUmidade() {
-    if (umidade < 30) {
-      return "#e53935";
-    }
-
-    if (umidade < 70) {
-      return "#fbc02d";
-    }
-
+    if (umidade < 30) return "#e53935";
+    if (umidade < 70) return "#fbc02d";
     return "#2e7d32";
   }
 
-  const corUmidade =
-    obterCorUmidade();
+  const corUmidade = obterCorUmidade();
 
   // =========================
   // EDITAR PLANTA
   // =========================
 
   function iniciarEdicao() {
-    if (!plantaSelecionada) {
-      return;
-    }
+    if (!plantaSelecionada) return;
 
-    setNomeEditado(
-      plantaSelecionada.nome
-    );
-
-    setTipoEditado(
-      plantaSelecionada.tipo
-    );
-
+    setNomeEditado(plantaSelecionada.nome);
+    setTipoEditado(plantaSelecionada.tipo);
     setEditandoPlanta(true);
   }
 
@@ -248,75 +205,43 @@ function Plantapet({ usuario, aoSair }) {
   }
 
   async function salvarEdicao() {
-    if (!plantaSelecionada) {
-      return;
-    }
+    if (!plantaSelecionada) return;
 
     if (!nomeEditado.trim()) {
-      alert(
-        "Digite o nome da planta."
-      );
-
+      setTipoMensagemPlantas("erro");
+      setMensagemPlantas("Digite o nome da planta.");
       return;
     }
 
-    const plantaAtualizada = {
-      ...plantaSelecionada,
-      nome: nomeEditado,
-      tipo: tipoEditado,
-    };
-
     try {
-      const resposta = await fetch(
-        `http://localhost:3001/plantas/${plantaSelecionada.id}`,
-        {
-          method: "PUT",
+      const { data: plantaSalva, error } = await supabase
+        .from("plantas")
+        .update({
+          nome: nomeEditado.trim(),
+          tipo: tipoEditado,
+        })
+        .eq("id", plantaSelecionada.id)
+        .eq("usuario_id", usuario.id)
+        .select()
+        .single();
 
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
+      if (error) throw error;
 
-          body: JSON.stringify(
-            plantaAtualizada
-          ),
-        }
+      setPlantas((atuais) =>
+        atuais.map((planta) =>
+          planta.id === plantaSalva.id ? plantaSalva : planta
+        )
       );
 
-      if (!resposta.ok) {
-        throw new Error(
-          "Erro ao editar planta"
-        );
-      }
-
-      const plantaSalva =
-        await resposta.json();
-
-      setPlantas(
-        (plantasAtuais) =>
-          plantasAtuais.map(
-            (planta) =>
-              planta.id ===
-              plantaSalva.id
-                ? plantaSalva
-                : planta
-          )
-      );
-
-      setPlantaSelecionada(
-        plantaSalva
-      );
-
+      setPlantaSelecionada(plantaSalva);
       setEditandoPlanta(false);
-
-      alert(
-        "Planta atualizada com sucesso!"
-      );
+      setTipoMensagemPlantas("sucesso");
+      setMensagemPlantas("Planta atualizada com sucesso.");
     } catch (erro) {
       console.error(erro);
-
-      alert(
-        "Não foi possível atualizar a planta."
+      setTipoMensagemPlantas("erro");
+      setMensagemPlantas(
+        "Não foi possível atualizar a planta. Tente novamente."
       );
     }
   }
@@ -327,68 +252,38 @@ function Plantapet({ usuario, aoSair }) {
 
   async function cadastrarPlanta() {
     if (!nomeNovaPlanta.trim()) {
-      alert(
-        "Digite o nome da planta."
-      );
-
+      setTipoMensagemPlantas("erro");
+      setMensagemPlantas("Digite o nome da planta.");
       return;
     }
 
     const novaPlanta = {
-      nome: nomeNovaPlanta,
+      nome: nomeNovaPlanta.trim(),
       tipo: tipoNovaPlanta,
-      usuarioId: usuario.id,
+      usuario_id: usuario.id,
     };
 
     try {
-      const resposta = await fetch(
-        "http://localhost:3001/plantas",
-        {
-          method: "POST",
+      const { data: plantaSalva, error } = await supabase
+        .from("plantas")
+        .insert(novaPlanta)
+        .select()
+        .single();
 
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
+      if (error) throw error;
 
-          body: JSON.stringify(
-            novaPlanta
-          ),
-        }
-      );
-
-      if (!resposta.ok) {
-        throw new Error(
-          "Erro ao cadastrar planta"
-        );
-      }
-
-      const plantaSalva =
-        await resposta.json();
-
-      setPlantas(
-        (plantasAtuais) => [
-          ...plantasAtuais,
-          plantaSalva,
-        ]
-      );
-
+      setPlantas((atuais) => [...atuais, plantaSalva]);
       setNomeNovaPlanta("");
-
-      setTipoNovaPlanta(
-        "Samambaia"
-      );
-
+      setTipoNovaPlanta("Samambaia");
       setMostrarCadastro(false);
 
-      alert(
-        "Planta cadastrada com sucesso!"
-      );
+      setTipoMensagemPlantas("sucesso");
+      setMensagemPlantas("Planta cadastrada com sucesso.");
     } catch (erro) {
       console.error(erro);
-
-      alert(
-        "Não foi possível cadastrar a planta."
+      setTipoMensagemPlantas("erro");
+      setMensagemPlantas(
+        "Não foi possível cadastrar a planta. Tente novamente."
       );
     }
   }
@@ -398,66 +293,53 @@ function Plantapet({ usuario, aoSair }) {
   // =========================
 
   async function excluirPlanta() {
-    if (!plantaSelecionada) {
-      return;
-    }
+    if (!plantaSelecionada) return;
 
-    const confirmar =
-      window.confirm(
-        `Tem certeza que deseja excluir a planta "${plantaSelecionada.nome}"?`
-      );
+    const confirmar = window.confirm(
+      `Tem certeza que deseja excluir a planta "${plantaSelecionada.nome}"?`
+    );
 
-    if (!confirmar) {
-      return;
-    }
+    if (!confirmar) return;
 
     try {
-      const resposta = await fetch(
-        `http://localhost:3001/plantas/${plantaSelecionada.id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const { data: plantaExcluida, error } = await supabase
+        .from("plantas")
+        .delete()
+        .eq("id", plantaSelecionada.id)
+        .eq("usuario_id", usuario.id)
+        .select("id")
+        .maybeSingle();
 
-      if (!resposta.ok) {
+      if (error) throw error;
+
+      if (!plantaExcluida) {
         throw new Error(
-          "Erro ao excluir planta"
+          "Planta não encontrada ou sem permissão para excluí-la."
         );
       }
 
-      setPlantas(
-        (plantasAtuais) =>
-          plantasAtuais.filter(
-            (planta) =>
-              planta.id !==
-              plantaSelecionada.id
-          )
+      setPlantas((atuais) =>
+        atuais.filter((planta) => planta.id !== plantaSelecionada.id)
       );
 
       setPlantaSelecionada(null);
-
       setIrrigando(false);
-
       setEditandoPlanta(false);
 
-      alert(
-        "Planta excluída com sucesso!"
-      );
+      setTipoMensagemPlantas("sucesso");
+      setMensagemPlantas("Planta excluída com sucesso.");
     } catch (erro) {
       console.error(erro);
-
-      alert(
-        "Não foi possível excluir a planta."
+      setTipoMensagemPlantas("erro");
+      setMensagemPlantas(
+        erro.message || "Não foi possível excluir a planta. Tente novamente."
       );
     }
   }
 
-  const dadosPlantaSelecionada =
-    plantaSelecionada
-      ? tiposDePlantas[
-          plantaSelecionada.tipo
-        ]
-      : null;
+  const dadosPlantaSelecionada = plantaSelecionada
+    ? tiposDePlantas[plantaSelecionada.tipo]
+    : null;
 
   // =========================
   // TELA
@@ -465,541 +347,310 @@ function Plantapet({ usuario, aoSair }) {
 
   return (
     <div className="app">
-
-      {/* CABEÇALHO */}
-
       <header className="header">
+        <h1>Plantapet</h1>
 
-        <h1>
-          Plantapet
-        </h1>
+        <p>Olá, {usuario.nome}! Cuide das suas plantas.</p>
 
-        <p>
-          Olá, {usuario.nome}! Cuide das
-          suas plantas.
-        </p>
-
-        <button
-          className="botao-sair"
-          onClick={aoSair}
-        >
+        <button className="botao-sair" onClick={aoSair}>
           Sair
         </button>
-
       </header>
 
       <main className="dashboard">
+        <div className="dashboard-layout">
 
-        <section className="card plantas-card">
+          {/* ÁREA PRINCIPAL */}
 
-          {/* TÍTULO */}
-
-          <div className="titulo-plantas">
-
-            <div>
-
-              <h2>
-                Minhas plantas
-              </h2>
-
-              <p>
-                Clique em uma planta para
-                acompanhar os cuidados.
-              </p>
-
-            </div>
-
-            <button
-              className="botao-adicionar-planta"
-              onClick={() =>
-                setMostrarCadastro(true)
-              }
-            >
-              + Adicionar planta
-            </button>
-
-          </div>
-
-          {/* FORMULÁRIO DE CADASTRO */}
-
-          {mostrarCadastro && (
-            <div className="formulario-planta">
-
-              <h3>
-                Adicionar nova planta
-              </h3>
-
-              <input
-                type="text"
-                placeholder="Nome da planta"
-                value={nomeNovaPlanta}
-                onChange={(e) =>
-                  setNomeNovaPlanta(
-                    e.target.value
-                  )
-                }
-              />
-
-              <select
-                value={tipoNovaPlanta}
-                onChange={(e) =>
-                  setTipoNovaPlanta(
-                    e.target.value
-                  )
-                }
-              >
-
-                <option value="Samambaia">
-                  Samambaia
-                </option>
-
-                <option value="Flor">
-                  Flor
-                </option>
-
-                <option value="Árvore">
-                  Árvore
-                </option>
-
-                <option value="Suculenta">
-                  Suculenta
-                </option>
-
-                <option value="Folhagem">
-                  Folhagem
-                </option>
-
-                <option value="Cacto">
-                  Cacto
-                </option>
-
-              </select>
-
-              <div className="botoes-formulario">
-
-                <button
-                  className="botao-salvar-planta"
-                  onClick={
-                    cadastrarPlanta
-                  }
-                >
-                  Salvar planta
-                </button>
-
-                <button
-                  className="botao-cancelar-planta"
-                  onClick={() =>
-                    setMostrarCadastro(
-                      false
-                    )
-                  }
-                >
-                  Cancelar
-                </button>
-
+          <section className="card plantas-card">
+            <div className="titulo-plantas">
+              <div>
+                <h2>Minhas plantas</h2>
+                <p>
+                  Clique em uma planta para acompanhar os cuidados.
+                </p>
               </div>
 
+              <button
+                className="botao-adicionar-planta"
+                onClick={() => setMostrarCadastro(!mostrarCadastro)}
+              >
+                {mostrarCadastro ? "Cancelar cadastro" : "+ Adicionar planta"}
+              </button>
             </div>
-          )}
 
-          {/* PAINEL DA PLANTA */}
+            {mensagemPlantas && (
+              <p
+                role={tipoMensagemPlantas === "erro" ? "alert" : "status"}
+                style={{
+                  margin: "12px 0",
+                  color:
+                    tipoMensagemPlantas === "erro" ? "#c62828" : "#2e7d32",
+                  fontWeight: "bold",
+                }}
+              >
+                {mensagemPlantas}
+              </p>
+            )}
 
-          {plantaSelecionada &&
-            dadosPlantaSelecionada && (
+            {/* CADASTRO */}
 
+            {mostrarCadastro && (
+              <div className="formulario-planta">
+                <h3>Nova planta</h3>
+
+                <input
+                  type="text"
+                  placeholder="Nome da planta"
+                  value={nomeNovaPlanta}
+                  onChange={(e) => setNomeNovaPlanta(e.target.value)}
+                />
+
+                <select
+                  value={tipoNovaPlanta}
+                  onChange={(e) => setTipoNovaPlanta(e.target.value)}
+                >
+                  <option value="Samambaia">Samambaia</option>
+                  <option value="Flor">Flor</option>
+                  <option value="Árvore">Árvore</option>
+                  <option value="Suculenta">Suculenta</option>
+                  <option value="Folhagem">Folhagem</option>
+                  <option value="Cacto">Cacto</option>
+                </select>
+
+                <div className="botoes-formulario">
+                  <button
+                    className="botao-salvar-planta"
+                    onClick={cadastrarPlanta}
+                  >
+                    Salvar planta
+                  </button>
+
+                  <button
+                    className="botao-cancelar-planta"
+                    onClick={() => setMostrarCadastro(false)}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* PAINEL DA PLANTA */}
+
+            {plantaSelecionada && dadosPlantaSelecionada && (
               <div className="painel-planta">
-
                 <div className="painel-imagem">
-
-                  {
-                    dadosPlantaSelecionada.imagem
-                  }
-
+                  {dadosPlantaSelecionada.imagem}
                 </div>
 
                 <div className="painel-conteudo">
-
-                  {/* EDIÇÃO */}
-
                   {editandoPlanta ? (
-
                     <div className="formulario-edicao">
+                      <h3>Editar planta</h3>
 
-                      <h3>
-                        Editar planta
-                      </h3>
-
-                      <label>
-                        Nome da planta
-                      </label>
-
+                      <label>Nome da planta</label>
                       <input
                         type="text"
                         value={nomeEditado}
-                        onChange={(e) =>
-                          setNomeEditado(
-                            e.target.value
-                          )
-                        }
+                        onChange={(e) => setNomeEditado(e.target.value)}
                       />
 
-                      <label>
-                        Tipo da planta
-                      </label>
-
+                      <label>Tipo da planta</label>
                       <select
                         value={tipoEditado}
-                        onChange={(e) =>
-                          setTipoEditado(
-                            e.target.value
-                          )
-                        }
+                        onChange={(e) => setTipoEditado(e.target.value)}
                       >
-
-                        <option value="Samambaia">
-                          Samambaia
-                        </option>
-
-                        <option value="Flor">
-                          Flor
-                        </option>
-
-                        <option value="Árvore">
-                          Árvore
-                        </option>
-
-                        <option value="Suculenta">
-                          Suculenta
-                        </option>
-
-                        <option value="Folhagem">
-                          Folhagem
-                        </option>
-
-                        <option value="Cacto">
-                          Cacto
-                        </option>
-
+                        <option value="Samambaia">Samambaia</option>
+                        <option value="Flor">Flor</option>
+                        <option value="Árvore">Árvore</option>
+                        <option value="Suculenta">Suculenta</option>
+                        <option value="Folhagem">Folhagem</option>
+                        <option value="Cacto">Cacto</option>
                       </select>
 
                       <div className="botoes-edicao">
-
                         <button
                           className="botao-salvar-edicao"
-                          onClick={
-                            salvarEdicao
-                          }
+                          onClick={salvarEdicao}
                         >
                           Salvar alterações
                         </button>
 
                         <button
                           className="botao-cancelar-edicao"
-                          onClick={
-                            cancelarEdicao
-                          }
+                          onClick={cancelarEdicao}
                         >
                           Cancelar
                         </button>
-
                       </div>
-
                     </div>
-
                   ) : (
-
                     <div className="painel-titulo">
-
-                      <h2>
-                        {
-                          plantaSelecionada.nome
-                        }
-                      </h2>
-
-                      <p>
-                        {
-                          dadosPlantaSelecionada.descricao
-                        }
-                      </p>
-
+                      <h2>{plantaSelecionada.nome}</h2>
+                      <p>{dadosPlantaSelecionada.descricao}</p>
                     </div>
-
                   )}
 
                   {/* UMIDADE */}
 
                   <div className="painel-umidade">
-
                     <div className="umidade-topo">
-
-                      <span>
-                        Umidade do solo
-                      </span>
+                      <span>Umidade do solo</span>
 
                       <strong
                         className="porcentagem-umidade"
-                        style={{
-                          color:
-                            corUmidade,
-                        }}
+                        style={{ color: corUmidade }}
                       >
                         {umidade}%
                       </strong>
-
                     </div>
 
                     <div className="barra-planta">
-
                       <div
                         className="barra-planta-progresso"
                         style={{
-                          width:
-                            `${umidade}%`,
-
-                          background:
-                            corUmidade,
+                          width: `${umidade}%`,
+                          background: corUmidade,
                         }}
                       ></div>
-
                     </div>
 
-                    <div
-                      className={`status-umidade ${statusUmidade.classe}`}
-                    >
-                      {
-                        statusUmidade.texto
-                      }
+                    <div className={`status-umidade ${statusUmidade.classe}`}>
+                      {statusUmidade.texto}
                     </div>
 
                     <small>Leitura recebida do ESP32</small>
-
                   </div>
 
                   {/* IRRIGAÇÃO */}
 
                   <div
                     className={`controle-irrigacao ${
-                      irrigando
-                        ? "controle-ligado"
-                        : "controle-desligado"
+                      irrigando ? "controle-ligado" : "controle-desligado"
                     }`}
                   >
-
                     <div className="controle-info">
-
-                      <div className="controle-titulo">
-                        Irrigação
-                      </div>
-
-                      <strong>
-                        {irrigando
-                          ? "Ligada"
-                          : "Desligada"}
-                      </strong>
-
+                      <div className="controle-titulo">Irrigação</div>
+                      <strong>{irrigando ? "Ligada" : "Desligada"}</strong>
                     </div>
 
                     <button
                       className="botao-controle"
-                      onClick={
-                        alternarIrrigacao
-                      }
+                      onClick={alternarIrrigacao}
                     >
-                      {irrigando
-                        ? "Desligar"
-                        : "Ligar irrigação"}
+                      {irrigando ? "Desligar" : "Ligar irrigação"}
                     </button>
-
                   </div>
 
-                  {/* STATUS DO SISTEMA */}
+                  {/* STATUS */}
 
                   <div className="status-planta status-planta-ok">
-
-                    <span>
-                      ●
-                    </span>
-
-                    Sistema funcionando
-                    normalmente
-
+                    <span>●</span>
+                    Sistema funcionando normalmente
                   </div>
 
                   {/* INFORMAÇÕES */}
 
                   <div className="informacoes-planta-selecionada">
-
                     <div className="info-item">
-
-                      <span>
-                        Umidade ideal
-                      </span>
-
-                      <strong>
-                        {
-                          dadosPlantaSelecionada.umidade
-                        }
-                      </strong>
-
-                      <small>
-                        Faixa recomendada
-                      </small>
-
+                      <span>Umidade ideal</span>
+                      <strong>{dadosPlantaSelecionada.umidade}</strong>
+                      <small>Faixa recomendada</small>
                     </div>
 
                     <div className="info-item">
-
-                      <span>
-                        Necessidade de rega
-                      </span>
-
-                      <strong>
-                        {
-                          dadosPlantaSelecionada.rega
-                        }
-                      </strong>
-
-                      <small>
-                        Frequência recomendada
-                      </small>
-
+                      <span>Necessidade de rega</span>
+                      <strong>{dadosPlantaSelecionada.rega}</strong>
+                      <small>Frequência recomendada</small>
                     </div>
 
                     <div className="info-item">
-
-                      <span>
-                        Tipo
-                      </span>
-
-                      <strong>
-                        {
-                          plantaSelecionada.tipo
-                        }
-                      </strong>
-
-                      <small>
-                        Espécie cadastrada
-                      </small>
-
+                      <span>Tipo</span>
+                      <strong>{plantaSelecionada.tipo}</strong>
+                      <small>Espécie cadastrada</small>
                     </div>
-
                   </div>
 
                   {/* AÇÕES */}
 
                   <div className="area-acoes-planta">
-
                     <button
                       className="botao-editar-planta"
-                      onClick={
-                        iniciarEdicao
-                      }
+                      onClick={iniciarEdicao}
                     >
                       Editar planta
                     </button>
 
                     <button
                       className="botao-excluir-planta"
-                      onClick={
-                        excluirPlanta
-                      }
+                      onClick={excluirPlanta}
                     >
                       Excluir planta
                     </button>
-
                   </div>
-
                 </div>
-
               </div>
-
             )}
 
-          {/* LISTA DE PLANTAS */}
+            {/* LISTA DE PLANTAS */}
 
-          <div className="lista-plantas">
+            <div className="lista-plantas">
+              {carregandoPlantas ? (
+                <p role="status">Carregando plantas...</p>
+              ) : plantas.length === 0 ? (
+                <div className="sem-plantas">
+                  <h3>Nenhuma planta cadastrada</h3>
+                  <p>
+                    Clique em "+ Adicionar planta" para começar.
+                  </p>
+                </div>
+              ) : (
+                plantas.map((planta) => {
+                  const dados = tiposDePlantas[planta.tipo];
 
-            {plantas.length === 0 ? (
+                  const selecionada =
+                    plantaSelecionada?.id === planta.id;
 
-              <div className="sem-plantas">
+                  return (
+                    <div
+                      key={planta.id}
+                      className={`planta-card ${
+                        selecionada ? "planta-card-selecionada" : ""
+                      }`}
+                      onClick={() => selecionarPlanta(planta)}
+                    >
+                      <div className="imagem-planta">
+                        {dados ? dados.imagem : "🌱"}
+                      </div>
 
-                <h3>
-                  Nenhuma planta cadastrada
-                </h3>
+                      <div className="informacoes-planta">
+                        <h3>{planta.nome}</h3>
 
-                <p>
-                  Clique em "+ Adicionar
-                  planta" para começar.
-                </p>
-
-              </div>
-
-            ) : (
-
-              plantas.map((planta) => {
-
-                const dados =
-                  tiposDePlantas[
-                    planta.tipo
-                  ];
-
-                const selecionada =
-                  plantaSelecionada?.id ===
-                  planta.id;
-
-                return (
-
-                  <div
-                    key={planta.id}
-                    className={`planta-card ${
-                      selecionada
-                        ? "planta-card-selecionada"
-                        : ""
-                    }`}
-                    onClick={() =>
-                      selecionarPlanta(
-                        planta
-                      )
-                    }
-                  >
-
-                    <div className="imagem-planta">
-
-                      {dados
-                        ? dados.imagem
-                        : "🌱"}
-
+                        <p className="descricao">
+                          {dados
+                            ? dados.descricao
+                            : "Planta cadastrada no sistema."}
+                        </p>
+                      </div>
                     </div>
+                  );
+                })
+              )}
+            </div>
+          </section>
 
-                    <div className="informacoes-planta">
+          {/* ASSISTENTE FIXO NA LATERAL */}
 
-                      <h3>
-                        {planta.nome}
-                      </h3>
+          <aside className="dashboard-assistente">
+            <AssistenteIA
+              planta={plantaSelecionada}
+              umidade={umidade}
+            />
+          </aside>
 
-                      <p className="descricao">
-
-                        {dados
-                          ? dados.descricao
-                          : "Planta cadastrada no sistema."}
-
-                      </p>
-
-                    </div>
-
-                  </div>
-
-                );
-              })
-
-            )}
-
-          </div>
-
-        </section>
-
+        </div>
       </main>
-
     </div>
   );
 }

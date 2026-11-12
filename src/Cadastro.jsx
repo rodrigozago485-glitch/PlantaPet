@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "./lib/supabase";
 import "./Cadastro.css";
 
 function Cadastro({ aoVoltarLogin }) {
@@ -7,64 +8,66 @@ function Cadastro({ aoVoltarLogin }) {
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [carregando, setCarregando] = useState(false);
+  const [mensagem, setMensagem] = useState("");
+  const [erro, setErro] = useState(false);
 
   async function criarConta(event) {
     event.preventDefault();
 
+    setMensagem("");
+    setErro(false);
+
     if (!nome || !email || !senha || !confirmarSenha) {
-      alert("Preencha todos os campos.");
+      setErro(true);
+      setMensagem("Preencha todos os campos.");
       return;
     }
 
     if (senha !== confirmarSenha) {
-      alert("As senhas não são iguais.");
+      setErro(true);
+      setMensagem("As senhas não são iguais.");
       return;
     }
 
     if (senha.length < 6) {
-      alert("A senha precisa ter pelo menos 6 caracteres.");
+      setErro(true);
+      setMensagem("A senha precisa ter pelo menos 6 caracteres.");
       return;
     }
 
     try {
       setCarregando(true);
 
-      const resposta = await fetch(
-        "http://localhost:3001/usuarios",
-        {
-          method: "POST",
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password: senha,
+        options: {
+          data: { nome },
+        },
+      });
 
-          headers: {
-            "Content-Type": "application/json",
-          },
-
-          body: JSON.stringify({
-            nome,
-            email,
-            senha,
-          }),
-        }
-      );
-
-      if (!resposta.ok) {
-        throw new Error("Erro ao criar conta.");
+      if (error) {
+        throw error;
       }
 
-     alert("Conta criada com sucesso!");
+      setNome("");
+      setEmail("");
+      setSenha("");
+      setConfirmarSenha("");
 
-setNome("");
-setEmail("");
-setSenha("");
-setConfirmarSenha("");
+      if (!data.session) {
+        setErro(false);
+        setMensagem("Conta criada. Confirme seu e-mail antes de entrar.");
+        return;
+      }
 
-aoVoltarLogin();
+      aoVoltarLogin();
 
     } catch (erro) {
       console.error(erro);
 
-      alert(
-        "Não foi possível criar a conta. Verifique se o servidor está funcionando."
-      );
+      setErro(true);
+      setMensagem("Não foi possível criar a conta. Confira os dados e tente novamente.");
 
     } finally {
       setCarregando(false);
@@ -139,6 +142,25 @@ aoVoltarLogin();
               }
             />
           </div>
+
+          {mensagem && (
+            <div
+              className={erro ? "mensagem-erro" : "mensagem-sucesso"}
+              role={erro ? "alert" : "status"}
+              style={erro ? undefined : {
+                marginBottom: "18px",
+                padding: "12px 14px",
+                borderRadius: "10px",
+                background: "#e8f5e9",
+                border: "1px solid #a5d6a7",
+                color: "#2e7d32",
+                fontSize: "14px",
+                fontWeight: "bold",
+              }}
+            >
+              {mensagem}
+            </div>
+          )}
 
           <button
             type="submit"

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "./lib/supabase";
 import "./Login.css";
 
 function Login({ aoEntrar, aoCriarConta }) {
@@ -20,38 +21,31 @@ function Login({ aoEntrar, aoCriarConta }) {
     try {
       setCarregando(true);
 
-      const resposta = await fetch(
-        `http://localhost:3001/usuarios?email=${encodeURIComponent(
-          email
-        )}`
-      );
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password: senha,
+      });
 
-      if (!resposta.ok) {
-        throw new Error("Erro ao consultar usuário.");
-      }
-
-      const usuarios = await resposta.json();
-
-      if (usuarios.length === 0) {
-        setErro("E-mail ou senha incorretos.");
+      if (error) {
+        setErro(
+          error.code === "email_not_confirmed"
+            ? "Confirme seu e-mail antes de entrar."
+            : "E-mail ou senha incorretos. Confira seus dados e tente novamente."
+        );
         return;
       }
 
-      const usuario = usuarios[0];
-
-      if (usuario.senha !== senha) {
-        setErro("E-mail ou senha incorretos.");
+      if (!data.session || !data.user) {
+        setErro("Não foi possível conectar ao serviço de login. Tente novamente.");
         return;
       }
 
-      aoEntrar(usuario);
+      aoEntrar(data.user);
 
     } catch (erro) {
       console.error(erro);
 
-      setErro(
-        "Não foi possível fazer login. Tente novamente."
-      );
+      setErro("Não foi possível conectar ao serviço de login. Tente novamente.");
 
     } finally {
       setCarregando(false);
