@@ -1,14 +1,14 @@
-PLANTAPET
+ 🌱 PLANTAPET
 
 O PlantaPet é um projeto que desenvolvi com o objetivo de utilizar a tecnologia para facilitar o cuidado e o monitoramento de plantas.
 
-A aplicação permite cadastrar usuários, registrar plantas, acompanhar a umidade do solo, controlar a irrigação, consultar informações por meio de inteligência artificial e visualizar a localização das plantas em um mapa interativo.
+A aplicação permite cadastrar usuários, registrar plantas, acompanhar a umidade do solo, controlar a irrigação, consultar informações por meio de inteligência artificial, visualizar a localização das plantas em um mapa interativo e acompanhar a previsão do clima.
 
 O projeto integra desenvolvimento web, banco de dados, hardware e inteligência artificial, criando uma solução para tornar o cuidado com as plantas mais simples, organizado e inteligente.
 
-FUNCIONALIDADES DO SISTEMA
+ ⚙️ FUNCIONALIDADES DO SISTEMA
 
-LOGIN E AUTENTICAÇÃO DE USUÁRIOS
+ 🔐 LOGIN E AUTENTICAÇÃO DE USUÁRIOS
 
 O sistema possui uma tela de login para que cada usuário possa acessar sua própria conta.
 
@@ -16,7 +16,7 @@ A autenticação permite entrar utilizando e-mail e senha, mantendo os dados ass
 
 Também existe a opção de criar uma nova conta para utilizar a plataforma.
 
-CADASTRO DE USUÁRIOS
+ 👤 CADASTRO DE USUÁRIOS
 
 O usuário pode criar uma conta informando seus dados de cadastro.
 
@@ -24,7 +24,7 @@ Após o registro, pode realizar o login e acessar as funcionalidades do PlantaPe
 
 A autenticação e o gerenciamento das contas são realizados pelo Supabase.
 
-GERENCIAMENTO DE PLANTAS
+🪴 GERENCIAMENTO DE PLANTAS
 
 O sistema permite cadastrar novas plantas, editar informações existentes e excluir plantas cadastradas.
 
@@ -32,7 +32,7 @@ Cada usuário pode organizar suas plantas dentro da própria conta.
 
 As informações das plantas são armazenadas no banco de dados, permitindo consultar os registros posteriormente.
 
-INFORMAÇÕES E IDENTIFICAÇÃO DAS PLANTAS
+ 🌿 INFORMAÇÕES E IDENTIFICAÇÃO DAS PLANTAS
 
 Cada planta possui suas próprias informações de identificação, como nome e tipo.
 
@@ -40,7 +40,7 @@ Esses dados ajudam a organizar o ambiente e diferenciar as plantas cadastradas.
 
 O sistema utiliza essas informações para relacionar os dados de monitoramento e localização de cada planta.
 
-MONITORAMENTO DA UMIDADE DO SOLO
+💧 MONITORAMENTO DA UMIDADE DO SOLO
 
 O PlantaPet possui integração com um sensor de umidade conectado ao ESP32.
 
@@ -50,7 +50,24 @@ Dessa maneira, é possível acompanhar as condições do solo e identificar quan
 
 Quando o sensor não está conectado ou não está funcionando corretamente, o sistema identifica a situação e apresenta o estado de espera ou falha, evitando tratar uma leitura inválida como uma medição real.
 
-INTEGRAÇÃO COM ESP32
+ 🌡️ PREVISÃO DO CLIMA
+
+O PlantaPet possui integração com a API Open-Meteo para consultar informações meteorológicas reais de acordo com a localização da planta cadastrada.
+
+O sistema apresenta informações como:
+
+- 🌡️ Temperatura atual.
+- 🌤️ Sensação térmica.
+- 💦 Umidade do ar.
+- 💨 Velocidade do vento.
+- 🌧️ Probabilidade de chuva.
+- ☀️ Condições climáticas, como sol, nuvens e chuva.
+
+As informações são consultadas utilizando as coordenadas geográficas da planta e atualizadas automaticamente a cada 15 minutos.
+
+Essa funcionalidade permite acompanhar as condições climáticas da região onde a planta está localizada e ter mais informações para auxiliar nos cuidados diários.
+
+ 🔌 INTEGRAÇÃO COM ESP32
 
 O projeto utiliza um ESP32 para realizar a comunicação com os componentes físicos.
 
@@ -58,7 +75,7 @@ O microcontrolador recebe as informações do sensor de umidade e disponibiliza 
 
 Essa integração conecta o ambiente físico ao sistema web, permitindo acompanhar as informações coletadas pelo hardware.
 
-CONTROLE DA IRRIGAÇÃO
+ 🚿 CONTROLE DA IRRIGAÇÃO
 
 O sistema possui integração com um módulo relé responsável pelo acionamento do mecanismo de irrigação.
 
@@ -66,7 +83,7 @@ Por meio dessa integração, é possível controlar o acionamento do sistema de 
 
 O objetivo é facilitar o processo de fornecimento de água para as plantas.
 
-IDENTIFICAÇÃO DE FALHAS NO SENSOR
+ ⚠️ IDENTIFICAÇÃO DE FALHAS NO SENSOR
 
 O PlantaPet também considera situações em que o sensor de umidade está desconectado ou apresenta problemas de funcionamento.
 
@@ -74,7 +91,7 @@ Quando isso acontece, o sistema informa que está aguardando uma leitura válida
 
 Essa funcionalidade ajuda a evitar informações incorretas sobre a condição do solo.
 
-ASSISTENTE DE INTELIGÊNCIA ARTIFICIAL
+ 🤖 ASSISTENTE DE INTELIGÊNCIA ARTIFICIAL
 
 O projeto possui um assistente de inteligência artificial desenvolvido para auxiliar nos cuidados com as plantas.
 
@@ -82,7 +99,7 @@ A integração permite oferecer orientações e informações relacionadas ao cu
 
 A proposta é facilitar o acesso a informações úteis para quem deseja cuidar melhor de suas plantas.
 
-MAPA INTERATIVO DAS PLANTAS
+ 🗺️ MAPA INTERATIVO DAS PLANTAS
 
 O PlantaPet possui um mapa interativo que permite visualizar a localização das plantas cadastradas.
 
@@ -92,7 +109,7 @@ O mapa utiliza as informações reais cadastradas no sistema e apresenta um marc
 
 Quando uma nova planta é cadastrada com sua localização, ela também passa a aparecer no mapa.
 
-CADASTRO DE LOCALIZAÇÃO POR CEP OU ENDEREÇO
+ 📍 CADASTRO DE LOCALIZAÇÃO POR CEP OU ENDEREÇO
 
 Durante o cadastro ou edição de uma planta, o usuário pode informar sua localização por meio do CEP ou de um endereço.
 
@@ -100,23 +117,20 @@ O sistema utiliza essas informações para identificar a localização geográfi
 
 Também é possível informar o número e o complemento do endereço.
 
-PREENCHIMENTO AUTOMÁTICO DE ENDEREÇO
+ 📝 PREENCHIMENTO AUTOMÁTICO DE ENDEREÇO
 
 O sistema possui integração com o ViaCEP para facilitar o preenchimento das informações de localização.
 
 Ao informar um CEP válido, a aplicação consulta o serviço e preenche automaticamente os campos disponíveis:
 
-Rua.
-
-Bairro.
-
-Cidade.
-
-Estado.
+- Rua.
+- Bairro.
+- Cidade.
+- Estado.
 
 O usuário precisa complementar as informações necessárias, como número e complemento.
 
-LOCALIZAÇÃO GEOGRÁFICA DAS PLANTAS
+ 🌎 LOCALIZAÇÃO GEOGRÁFICA DAS PLANTAS
 
 Após informar o endereço, o sistema utiliza um serviço de geocodificação para obter as coordenadas geográficas.
 
@@ -124,7 +138,7 @@ Essas coordenadas são utilizadas para posicionar o marcador da planta no mapa.
 
 Dessa forma, cada planta pode ser identificada individualmente de acordo com sua localização cadastrada.
 
-INTEGRAÇÃO COM SUPABASE
+ ☁️ INTEGRAÇÃO COM SUPABASE
 
 O Supabase é utilizado como infraestrutura de banco de dados e autenticação do projeto.
 
@@ -134,52 +148,46 @@ Os registros das plantas são relacionados ao usuário responsável, permitindo 
 
 O banco de dados também armazena as informações de endereço e coordenadas utilizadas pelo mapa.
 
-TECNOLOGIAS UTILIZADAS
+ 💻 TECNOLOGIAS UTILIZADAS
 
-Frontend:
+**Frontend:**
 
-React.
+- React.
+- JavaScript.
+- Vite.
+- CSS.
 
-JavaScript.
+**Banco de dados e autenticação:**
 
-Vite.
+- Supabase.
 
-CSS.
+**Mapas e localização:**
 
-Banco de dados e autenticação:
+- Leaflet.
+- React Leaflet.
+- OpenStreetMap.
+- Nominatim.
+- ViaCEP.
 
-Supabase.
+**Previsão do clima:**
 
-Mapas e localização:
+- Open-Meteo API.
 
-Leaflet.
+**Hardware:**
 
-React Leaflet.
+- ESP32.
+- Sensor de umidade do solo.
+- Módulo relé.
+- Sistema de irrigação.
 
-OpenStreetMap.
+**Inteligência artificial:**
 
-Nominatim.
+- Groq.
 
-ViaCEP.
-
-Hardware:
-
-ESP32.
-
-Sensor de umidade do solo.
-
-Módulo relé.
-
-Sistema de irrigação.
-
-Inteligência artificial:
-
-Groq.
-
-OBJETIVO DO PROJETO
+ 🎯 OBJETIVO DO PROJETO
 
 Meu objetivo com o PlantaPet é desenvolver uma aplicação que una programação, eletrônica e inteligência artificial para melhorar a maneira como cuidamos das plantas.
 
-O projeto busca integrar o monitoramento físico do solo, o controle de irrigação, o armazenamento de informações, a localização geográfica e a inteligência artificial em uma única plataforma.
+O projeto busca integrar o monitoramento físico do solo, o controle de irrigação, o armazenamento de informações, a localização geográfica, a previsão do clima e a inteligência artificial em uma única plataforma.
 
 Com isso, pretendo continuar expandindo o sistema e acrescentando novas funcionalidades para torná-lo cada vez mais completo.
