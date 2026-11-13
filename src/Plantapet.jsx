@@ -87,6 +87,24 @@ const tiposDePlantas = {
 
 
 
+
+function descricaoDoClima(codigo) {
+  const descricoes = {
+    0: ["Céu limpo", "☀️"], 1: ["Predominantemente limpo", "🌤️"],
+    2: ["Parcialmente nublado", "⛅"], 3: ["Nublado", "☁️"],
+    45: ["Neblina", "🌫️"], 48: ["Neblina com geada", "🌫️"],
+    51: ["Garoa leve", "🌦️"], 53: ["Garoa moderada", "🌦️"], 55: ["Garoa intensa", "🌧️"],
+    56: ["Garoa congelante leve", "🌧️"], 57: ["Garoa congelante intensa", "🌧️"],
+    61: ["Chuva leve", "🌧️"], 63: ["Chuva moderada", "🌧️"], 65: ["Chuva forte", "🌧️"],
+    66: ["Chuva congelante leve", "🌧️"], 67: ["Chuva congelante forte", "🌧️"],
+    71: ["Neve leve", "🌨️"], 73: ["Neve moderada", "🌨️"], 75: ["Neve forte", "❄️"], 77: ["Grãos de neve", "❄️"],
+    80: ["Pancadas de chuva leves", "🌦️"], 81: ["Pancadas de chuva moderadas", "🌧️"], 82: ["Pancadas de chuva fortes", "⛈️"],
+    85: ["Pancadas de neve leves", "🌨️"], 86: ["Pancadas de neve fortes", "❄️"],
+    95: ["Trovoada", "⛈️"], 96: ["Trovoada com granizo leve", "⛈️"], 99: ["Trovoada com granizo forte", "⛈️"],
+  };
+  return descricoes[codigo] || ["Condição não identificada", "🌡️"];
+}
+
 function Plantapet({ usuario, aoSair }) {
 
   const [umidade, setUmidade] = useState(0);
@@ -98,6 +116,10 @@ function Plantapet({ usuario, aoSair }) {
   const [plantas, setPlantas] = useState([]);
 
   const [carregandoPlantas, setCarregandoPlantas] = useState(true);
+  const [clima, setClima] = useState(null);
+  const [carregandoClima, setCarregandoClima] = useState(false);
+  const [erroClima, setErroClima] = useState("");
+  const [atualizadoClima, setAtualizadoClima] = useState(null);
 
   const [mensagemPlantas, setMensagemPlantas] = useState("");
 
@@ -282,6 +304,64 @@ function Plantapet({ usuario, aoSair }) {
     };
 
   }, [usuario.id]);
+
+  // CLIMA CONSULTADO PELA LOCALIZACAO CADASTRADA DA PLANTA
+  const plantaParaClima =
+    plantaSelecionada && plantaSelecionada.latitude != null && plantaSelecionada.longitude != null
+      ? plantaSelecionada
+      : plantas.find((planta) => planta.latitude != null && planta.longitude != null);
+
+  const latitudeClima = plantaParaClima ? Number(plantaParaClima.latitude) : null;
+  const longitudeClima = plantaParaClima ? Number(plantaParaClima.longitude) : null;
+
+  useEffect(() => {
+    if (latitudeClima === null || longitudeClima === null || !Number.isFinite(latitudeClima) || !Number.isFinite(longitudeClima)) {
+      setClima(null);
+      setErroClima("Cadastre uma planta com endereço para consultar o clima da região.");
+      setCarregandoClima(false);
+      return;
+    }
+
+    let ativo = true;
+    async function buscarClima() {
+      setCarregandoClima(true);
+      setErroClima("");
+      try {
+        const parametros = new URLSearchParams({
+          latitude: String(latitudeClima),
+          longitude: String(longitudeClima),
+          current: "temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m",
+          daily: "precipitation_probability_max",
+          forecast_days: "1",
+          timezone: "auto",
+        });
+        const resposta = await fetch(`https://api.open-meteo.com/v1/forecast?${parametros}`);
+        if (!resposta.ok) throw new Error("Não foi possível consultar a previsão do tempo.");
+        const dados = await resposta.json();
+        if (!dados.current) throw new Error("O serviço de clima não retornou os dados esperados.");
+        if (ativo) {
+          setClima({
+            temperatura: dados.current.temperature_2m,
+            sensacao: dados.current.apparent_temperature,
+            umidadeAr: dados.current.relative_humidity_2m,
+            vento: dados.current.wind_speed_10m,
+            chuva: dados.daily?.precipitation_probability_max?.[0] ?? null,
+            codigo: dados.current.weather_code,
+          });
+          setAtualizadoClima(new Date());
+        }
+      } catch (erro) {
+        console.error("Erro ao consultar o clima:", erro);
+        if (ativo) setErroClima(erro.message || "Não foi possível carregar o clima.");
+      } finally {
+        if (ativo) setCarregandoClima(false);
+      }
+    }
+    buscarClima();
+    const intervaloClima = setInterval(buscarClima, 15 * 60 * 1000);
+    return () => { ativo = false; clearInterval(intervaloClima); };
+  }, [latitudeClima, longitudeClima]);
+
 
 
 
@@ -833,7 +913,38 @@ function Plantapet({ usuario, aoSair }) {
 
             </div>
 
-
+            <section className="clima-card" aria-live="polite">
+              <div className="clima-cabecalho">
+                <div>
+                  <h3>Clima da região</h3>
+                  <p>{plantaParaClima ? ([plantaParaClima.cidade, plantaParaClima.estado].filter(Boolean).join(" - ") || "Localização da planta") : "Previsão do tempo perto das suas plantas"}</p>
+                </div>
+                <span className="clima-atualizacao">{carregandoClima ? "Atualizando..." : "Atualização automática"}</span>
+              </div>
+              {clima ? (
+                <>
+                  <div className="clima-principal">
+                    <span className="clima-icone" aria-hidden="true">{descricaoDoClima(clima.codigo)[1]}</span>
+                    <div>
+                      <strong className="clima-temperatura">{Math.round(clima.temperatura)}°C</strong>
+                      <span className="clima-descricao">{descricaoDoClima(clima.codigo)[0]}</span>
+                      <small>Sensação térmica de {Math.round(clima.sensacao)}°C</small>
+                    </div>
+                  </div>
+                  <div className="clima-indicadores">
+                    <div><span>Umidade do ar</span><strong>{clima.umidadeAr}%</strong></div>
+                    <div><span>Vento</span><strong>{Math.round(clima.vento)} km/h</strong></div>
+                    <div><span>Chance de chuva hoje</span><strong>{clima.chuva === null ? "—" : `${clima.chuva}%`}</strong></div>
+                  </div>
+                  {atualizadoClima && <small className="clima-horario">Atualizado às {atualizadoClima.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</small>}
+                </>
+              ) : (
+                <div className={erroClima && !carregandoClima ? "clima-mensagem clima-erro" : "clima-mensagem"}>
+                  {carregandoClima ? "Buscando as condições do tempo..." : erroClima || "Aguardando dados do clima."}
+                </div>
+              )}
+              <small className="clima-fonte">Dados meteorológicos: Open-Meteo</small>
+            </section>
 
             {mensagemPlantas && (
 

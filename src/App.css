@@ -2250,3 +2250,26 @@ button {
     height: 340px;
   }
 }
+
+
+/* PAINEL DE CLIMA */
+.clima-card { margin: 22px 0 8px; padding: 20px; border: 1px solid #dce8d9; border-radius: 16px; background: linear-gradient(135deg, #f2f9f0, #ffffff); text-align: left; }
+.clima-cabecalho { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.clima-cabecalho h3 { margin-bottom: 5px; color: #2e7d32; font-size: 18px; }
+.clima-cabecalho p, .clima-atualizacao { color: #788178; font-size: 12px; }
+.clima-atualizacao { padding: 6px 9px; border-radius: 20px; background: #e8f5e9; color: #2e7d32; white-space: nowrap; }
+.clima-principal { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+.clima-icone { display: flex; width: 68px; height: 68px; flex-shrink: 0; align-items: center; justify-content: center; border-radius: 18px; background: #e8f5e9; font-size: 42px; }
+.clima-principal > div { display: flex; flex-direction: column; gap: 3px; }
+.clima-temperatura { color: #1f2d1f; font-size: 34px; line-height: 1.1; }
+.clima-descricao { color: #2e7d32; font-size: 14px; font-weight: 700; }
+.clima-principal small, .clima-horario, .clima-fonte { color: #899489; font-size: 11px; }
+.clima-indicadores { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding-top: 15px; border-top: 1px solid #dce8d9; }
+.clima-indicadores div { display: flex; flex-direction: column; gap: 6px; }
+.clima-indicadores span { color: #788178; font-size: 11px; line-height: 1.35; }
+.clima-indicadores strong { color: #2e7d32; font-size: 17px; }
+.clima-horario { display: block; margin-top: 12px; }
+.clima-fonte { display: block; margin-top: 10px; }
+.clima-mensagem { padding: 16px; border-radius: 12px; background: #eaf5e8; color: #2e7d32; font-size: 13px; line-height: 1.5; }
+.clima-mensagem.clima-erro { background: #fff8e1; color: #8a6500; }
+@media (max-width: 600px) { .clima-card { padding: 16px; } .clima-cabecalho { flex-direction: column; } .clima-indicadores { gap: 7px; } .clima-indicadores strong { font-size: 15px; } }
