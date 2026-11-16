@@ -108,6 +108,7 @@ function descricaoDoClima(codigo) {
 function Plantapet({ usuario, aoSair }) {
 
   const [umidade, setUmidade] = useState(0);
+  const [simularAlertaIrrigacao, setSimularAlertaIrrigacao] = useState(false);
 
   const [irrigando, setIrrigando] = useState(false);
 
@@ -1500,9 +1501,12 @@ function Plantapet({ usuario, aoSair }) {
           </section>
 
          <MapaPlantas
-  plantas={plantas}
-  plantaSelecionada={plantaSelecionada}
-/>
+            plantas={plantas}
+            plantaSelecionada={plantaSelecionada}
+            alertaIrrigacao={simularAlertaIrrigacao}
+            aoSimularAlerta={() => setSimularAlertaIrrigacao(true)}
+            aoEncerrarSimulacao={() => setSimularAlertaIrrigacao(false)}
+          />
           {/* ASSISTENTE FIXO NA LATERAL */}
 
 

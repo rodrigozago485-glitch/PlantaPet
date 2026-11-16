@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo } from "react";
 import L from "leaflet";
 import {
@@ -12,7 +11,6 @@ import {
 import "leaflet/dist/leaflet.css";
 import "./App.css";
 
-// Marcador normal
 function criarIconePlanta() {
   return L.divIcon({
     className: "marcador-planta-container",
@@ -23,7 +21,6 @@ function criarIconePlanta() {
   });
 }
 
-// Marcador da planta selecionada
 function criarIconePlantaSelecionada() {
   return L.divIcon({
     className: "marcador-planta-container marcador-planta-ativa",
@@ -39,14 +36,46 @@ function criarIconePlantaSelecionada() {
   });
 }
 
+function criarIconePlantaEmAlerta() {
+  return L.divIcon({
+    className: "marcador-planta-container marcador-planta-alerta",
+    html: `
+      <div class="marcador-planta-alerta-destaque">
+        <div class="marcador-planta-alerta-pulso"></div>
+        <div class="marcador-planta-alerta-real">🌱</div>
+      </div>
+    `,
+    iconSize: [70, 70],
+    iconAnchor: [35, 59],
+    popupAnchor: [0, -55],
+  });
+}
+
 const iconePlanta = criarIconePlanta();
 const iconePlantaSelecionada = criarIconePlantaSelecionada();
+const iconePlantaEmAlerta = criarIconePlantaEmAlerta();
 
-// Controla o enquadramento do mapa
-function AjustarVisualizacao({ plantas, plantaSelecionada }) {
+function AjustarVisualizacao({
+  plantas,
+  plantaSelecionada,
+  alertaIrrigacao,
+}) {
   const mapa = useMap();
 
   useEffect(() => {
+    if (alertaIrrigacao && plantaSelecionada) {
+      const latitude = Number(plantaSelecionada.latitude);
+      const longitude = Number(plantaSelecionada.longitude);
+
+      if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+        mapa.flyTo([latitude, longitude], 18, {
+          animate: true,
+          duration: 1.4,
+        });
+      }
+      return;
+    }
+
     if (plantaSelecionada) {
       const latitude = Number(plantaSelecionada.latitude);
       const longitude = Number(plantaSelecionada.longitude);
@@ -57,20 +86,15 @@ function AjustarVisualizacao({ plantas, plantaSelecionada }) {
           duration: 1.2,
         });
       }
-
       return;
     }
 
     if (plantas.length === 1) {
       mapa.flyTo(
-        [
-          Number(plantas[0].latitude),
-          Number(plantas[0].longitude),
-        ],
+        [Number(plantas[0].latitude), Number(plantas[0].longitude)],
         16,
         { animate: true, duration: 1 }
       );
-
       return;
     }
 
@@ -88,7 +112,7 @@ function AjustarVisualizacao({ plantas, plantaSelecionada }) {
         animate: true,
       });
     }
-  }, [plantas, plantaSelecionada, mapa]);
+  }, [plantas, plantaSelecionada, alertaIrrigacao, mapa]);
 
   return null;
 }
@@ -96,6 +120,9 @@ function AjustarVisualizacao({ plantas, plantaSelecionada }) {
 export default function MapaPlantas({
   plantas = [],
   plantaSelecionada = null,
+  alertaIrrigacao = false,
+  aoSimularAlerta,
+  aoEncerrarSimulacao,
 }) {
   const plantasComLocalizacao = useMemo(
     () =>
@@ -139,12 +166,13 @@ export default function MapaPlantas({
     return [latitude, longitude];
   }, [plantasComLocalizacao]);
 
+  const alertaAtivo = Boolean(alertaIrrigacao && plantaSelecionadaNoMapa);
+
   return (
     <section className="mapa-plantas-secao">
       <div className="mapa-plantas-cabecalho">
         <div>
           <h2>Mapa das minhas plantas</h2>
-
           <p>
             Veja no mapa os locais informados no cadastro de cada planta.
           </p>
@@ -158,22 +186,65 @@ export default function MapaPlantas({
         </span>
       </div>
 
+      <div className="mapa-simulacao-controles">
+        <div>
+          <strong>Teste de irrigação</strong>
+          <small>
+            Selecione uma planta e simule um alerta para testar o destaque no mapa.
+          </small>
+        </div>
+
+        {alertaAtivo ? (
+          <button
+            type="button"
+            className="botao-encerrar-simulacao"
+            onClick={aoEncerrarSimulacao}
+          >
+            Encerrar simulação
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="botao-simular-irrigacao"
+            onClick={aoSimularAlerta}
+            disabled={!plantaSelecionadaNoMapa}
+            title={
+              plantaSelecionadaNoMapa
+                ? "Simular que esta planta precisa de irrigação"
+                : "Selecione uma planta com localização no mapa primeiro"
+            }
+          >
+            Simular necessidade de irrigação
+          </button>
+        )}
+      </div>
+
+      {!plantaSelecionadaNoMapa && plantasComLocalizacao.length > 0 && (
+        <p className="mapa-simulacao-ajuda">
+          Para testar, clique em uma planta na lista de plantas e depois volte ao mapa.
+        </p>
+      )}
+
       {plantasComLocalizacao.length > 0 ? (
         <>
-          {plantaSelecionadaNoMapa && (
-            <div className="mapa-planta-selecionada">
-              <span className="mapa-planta-selecionada-icone">
-                🌱
-              </span>
-
+          {alertaAtivo && (
+            <div className="mapa-alerta-irrigacao" role="alert">
+              <span className="mapa-alerta-irrigacao-icone">!</span>
               <div>
-                <strong>
-                  {plantaSelecionadaNoMapa.nome}
-                </strong>
-
+                <strong>Atenção! Esta planta precisa de irrigação.</strong>
                 <small>
-                  Planta selecionada no mapa
+                  {plantaSelecionadaNoMapa.nome} está em alerta na simulação.
                 </small>
+              </div>
+            </div>
+          )}
+
+          {plantaSelecionadaNoMapa && !alertaAtivo && (
+            <div className="mapa-planta-selecionada">
+              <span className="mapa-planta-selecionada-icone">🌱</span>
+              <div>
+                <strong>{plantaSelecionadaNoMapa.nome}</strong>
+                <small>Planta selecionada no mapa</small>
               </div>
             </div>
           )}
@@ -198,11 +269,13 @@ export default function MapaPlantas({
               <AjustarVisualizacao
                 plantas={plantasComLocalizacao}
                 plantaSelecionada={plantaSelecionadaNoMapa}
+                alertaIrrigacao={alertaAtivo}
               />
 
               {plantasComLocalizacao.map((planta) => {
                 const selecionada =
                   plantaSelecionadaNoMapa?.id === planta.id;
+                const emAlerta = alertaAtivo && selecionada;
 
                 return (
                   <Marker
@@ -212,18 +285,18 @@ export default function MapaPlantas({
                       Number(planta.longitude),
                     ]}
                     icon={
-                      selecionada
-                        ? iconePlantaSelecionada
-                        : iconePlanta
+                      emAlerta
+                        ? iconePlantaEmAlerta
+                        : selecionada
+                          ? iconePlantaSelecionada
+                          : iconePlanta
                     }
-                    zIndexOffset={selecionada ? 1000 : 0}
+                    zIndexOffset={emAlerta ? 2000 : selecionada ? 1000 : 0}
                   >
                     <Popup>
                       <div className="popup-planta-real">
                         <strong>{planta.nome}</strong>
-
                         <span>{planta.tipo}</span>
-
                         <span>
                           {[
                             planta.endereco,
@@ -240,11 +313,15 @@ export default function MapaPlantas({
                           <small>CEP: {planta.cep}</small>
                         )}
 
-                        {selecionada && (
+                        {emAlerta ? (
+                          <small className="popup-planta-alerta">
+                            Precisa de irrigação
+                          </small>
+                        ) : selecionada ? (
                           <small className="popup-planta-status">
                             Planta selecionada
                           </small>
-                        )}
+                        ) : null}
                       </div>
                     </Popup>
                   </Marker>
@@ -258,11 +335,16 @@ export default function MapaPlantas({
               <i />
               Marcador de planta cadastrada
             </span>
-
             <span className="mapa-legenda-selecionada">
               <i />
               Planta selecionada
             </span>
+            {alertaAtivo && (
+              <span className="mapa-legenda-alerta">
+                <i />
+                Precisa de irrigação
+              </span>
+            )}
           </div>
 
           <div className="mapa-lista-real">
@@ -297,9 +379,7 @@ export default function MapaPlantas({
                   </span>
 
                   {selecionada && (
-                    <span className="mapa-item-status">
-                      Selecionada
-                    </span>
+                    <span className="mapa-item-status">Selecionada</span>
                   )}
                 </div>
               );
@@ -308,12 +388,8 @@ export default function MapaPlantas({
         </>
       ) : (
         <div className="mapa-sem-plantas">
-          <div className="mapa-sem-plantas-icone">
-            ⌖
-          </div>
-
+          <div className="mapa-sem-plantas-icone">⌖</div>
           <h3>Nenhuma planta posicionada no mapa</h3>
-
           <p>
             Ao cadastrar uma planta, informe o CEP ou endereço.
             Ela aparecerá aqui automaticamente.
@@ -322,17 +398,16 @@ export default function MapaPlantas({
           {plantas.length > 0 && (
             <small>
               Você já tem plantas cadastradas sem coordenadas.
-              Edite cada uma e informe a localização para
-              adicioná-la ao mapa.
+              Edite cada uma e informe a localização para adicioná-la ao mapa.
             </small>
           )}
         </div>
       )}
 
       <p className="mapa-aviso-real">
-        As posições são obtidas a partir do endereço informado
-        e salvas junto com a planta no Supabase. A precisão
-        depende dos dados encontrados pelo serviço de mapas.
+        As posições são obtidas a partir do endereço informado e salvas junto
+        com a planta no Supabase. A precisão depende dos dados encontrados
+        pelo serviço de mapas.
       </p>
     </section>
   );
