@@ -1499,8 +1499,10 @@ function Plantapet({ usuario, aoSair }) {
 
           </section>
 
-          <MapaPlantas plantas={plantas} />
-
+         <MapaPlantas
+  plantas={plantas}
+  plantaSelecionada={plantaSelecionada}
+/>
           {/* ASSISTENTE FIXO NA LATERAL */}
 
 
