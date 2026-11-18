@@ -121,6 +121,7 @@ export default function MapaPlantas({
   plantas = [],
   plantaSelecionada = null,
   alertaIrrigacao = false,
+  aoSelecionarPlanta,
   aoSimularAlerta,
   aoEncerrarSimulacao,
 }) {
@@ -188,9 +189,9 @@ export default function MapaPlantas({
 
       <div className="mapa-simulacao-controles">
         <div>
-          <strong>Teste de irrigação</strong>
+          <strong>Teste</strong>
           <small>
-            Selecione uma planta e simule um alerta para testar o destaque no mapa.
+            Escolha uma planta para fazer a simulação de alerta
           </small>
         </div>
 
@@ -221,7 +222,7 @@ export default function MapaPlantas({
 
       {!plantaSelecionadaNoMapa && plantasComLocalizacao.length > 0 && (
         <p className="mapa-simulacao-ajuda">
-          Para testar, clique em uma planta na lista de plantas e depois volte ao mapa.
+          Para testar, selecione uma planta na lista abaixo.
         </p>
       )}
 
@@ -353,13 +354,16 @@ export default function MapaPlantas({
                 plantaSelecionadaNoMapa?.id === planta.id;
 
               return (
-                <div
+                <button
+                  type="button"
                   className={`mapa-item-real ${
                     selecionada
                       ? "mapa-item-real-selecionado"
                       : ""
                   }`}
                   key={planta.id}
+                  onClick={() => aoSelecionarPlanta?.(planta)}
+                  aria-pressed={selecionada}
                 >
                   <div>
                     <strong>{planta.nome}</strong>
@@ -381,7 +385,7 @@ export default function MapaPlantas({
                   {selecionada && (
                     <span className="mapa-item-status">Selecionada</span>
                   )}
-                </div>
+                </button>
               );
             })}
           </div>

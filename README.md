@@ -2,7 +2,7 @@
 
 O PlantaPet é um projeto que desenvolvi com o objetivo de utilizar a tecnologia para facilitar o cuidado e o monitoramento de plantas.
 
-A aplicação permite cadastrar usuários, registrar plantas, acompanhar a umidade do solo, controlar a irrigação, consultar informações por meio de inteligência artificial, visualizar a localização das plantas em um mapa interativo e acompanhar a previsão do clima.
+A aplicação permite cadastrar usuários e plantas, visualizar uma leitura de umidade quando um ESP32 compatível estiver conectado, simular o controle de irrigação, consultar informações por meio de inteligência artificial, visualizar as plantas em um mapa e acompanhar a previsão do clima.
 
 O projeto integra desenvolvimento web, banco de dados, hardware e inteligência artificial, criando uma solução para tornar o cuidado com as plantas mais simples, organizado e inteligente.
 
@@ -42,7 +42,7 @@ O sistema utiliza essas informações para relacionar os dados de monitoramento 
 
 💧 MONITORAMENTO DA UMIDADE DO SOLO
 
-O PlantaPet possui integração com um sensor de umidade conectado ao ESP32.
+A interface consulta um endpoint local do ESP32 (`http://172.24.3.237/umidade`). Como o hardware ainda não está disponível, a tela mostra a leitura como indisponível enquanto não recebe uma resposta válida.
 
 O sensor realiza a leitura da umidade do solo e envia os dados para a aplicação.
 
@@ -71,15 +71,15 @@ Essa funcionalidade permite acompanhar as condições climáticas da região ond
 
 O projeto utiliza um ESP32 para realizar a comunicação com os componentes físicos.
 
-O microcontrolador recebe as informações do sensor de umidade e disponibiliza os dados para a aplicação.
+Quando disponível na rede local, o microcontrolador pode disponibilizar a leitura do sensor para a aplicação. O endereço configurado atualmente é específico para o ambiente de teste.
 
 Essa integração conecta o ambiente físico ao sistema web, permitindo acompanhar as informações coletadas pelo hardware.
 
  🚿 CONTROLE DA IRRIGAÇÃO
 
-O sistema possui integração com um módulo relé responsável pelo acionamento do mecanismo de irrigação.
+O controle exibido atualmente é uma simulação visual. Ele não aciona um módulo relé, envia comandos ao ESP32 nem dispara notificações externas.
 
-Por meio dessa integração, é possível controlar o acionamento do sistema de irrigação utilizando o ESP32.
+A integração física do relé e dos comandos de irrigação ainda precisa ser implementada quando o hardware estiver disponível.
 
 O objetivo é facilitar o processo de fornecimento de água para as plantas.
 
@@ -99,9 +99,13 @@ A integração permite oferecer orientações e informações relacionadas ao cu
 
 A proposta é facilitar o acesso a informações úteis para quem deseja cuidar melhor de suas plantas.
 
+A função `assistente-ia` está configurada para exigir um JWT válido em `supabase/config.toml`. O cliente limita cada pergunta a 1.000 caracteres e envia no máximo 12 mensagens recentes. A implementação da Edge Function não está neste repositório; valide também o tamanho e o formato da requisição no servidor e mantenha a chave da Groq somente nos secrets do Supabase antes de publicar a função.
+
  🗺️ MAPA INTERATIVO DAS PLANTAS
 
 O PlantaPet possui um mapa interativo que permite visualizar a localização das plantas cadastradas.
+
+É possível selecionar uma planta pela lista do mapa e simular um alerta local para visualizar o destaque, sem enviar notificações externas.
 
 Cada planta pode possuir uma localização própria, permitindo organizar diferentes plantas em endereços distintos.
 
@@ -147,6 +151,10 @@ Ele permite armazenar as informações dos usuários e das plantas cadastradas.
 Os registros das plantas são relacionados ao usuário responsável, permitindo que cada conta tenha acesso aos próprios dados.
 
 O banco de dados também armazena as informações de endereço e coordenadas utilizadas pelo mapa.
+
+### Segurança dos dados das plantas
+
+A migração `supabase/migrations/20261118090000_secure_plantas_by_owner.sql` ativa RLS na tabela `public.plantas` e permite que cada usuário autenticado consulte, cadastre, edite e exclua somente registros cujo `usuario_id` corresponda ao próprio usuário. Aplique essa migração ao projeto Supabase antes de considerar essa proteção ativa no banco remoto. A chave `service_role` não deve ser usada no frontend.
 
  💻 TECNOLOGIAS UTILIZADAS
 

@@ -1,3 +1,2514 @@
+* {
+
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+}
+
+
+
+body {
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  background: #eef7ed;
+
+  color: #1f2d1f;
+
+}
+
+
+
+button {
+
+  font-family: inherit;
+
+}
+
+
+
+.app {
+
+  min-height: 100vh;
+
+}
+
+
+
+.header {
+
+  padding: 40px 20px;
+
+  text-align: center;
+
+  background: white;
+
+  border-bottom: 1px solid #dce8d9;
+
+}
+
+
+
+.header h1 {
+
+  font-size: 42px;
+
+  color: #2e7d32;
+
+  margin-bottom: 8px;
+
+}
+
+
+
+.header p {
+
+  font-size: 18px;
+
+  color: #687568;
+
+}
+
+
+
+.botao-sair {
+
+  margin-top: 15px;
+
+  padding: 10px 20px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #e53935;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+}
+
+
+
+.botao-sair:hover {
+
+  background: #c62828;
+
+  transform: translateY(-2px);
+
+}
+
+
+
+/* =========================
+
+   DASHBOARD
+
+\========================= */
+
+
+
+.dashboard {
+
+  width: min(1100px, 90%);
+
+  margin: 45px auto;
+
+}
+
+
+
+.card {
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 30px;
+
+  box-shadow:
+
+    0 10px 30px
+
+    rgba(40, 80, 40, 0.08);
+
+  text-align: center;
+
+}
+
+
+
+.plantas-card {
+
+  width: 100%;
+
+}
+
+
+
+/* =========================
+
+   TÍTULO DAS PLANTAS
+
+\========================= */
+
+
+
+.titulo-plantas {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  text-align: left;
+
+}
+
+
+
+.titulo-plantas h2 {
+
+  margin-bottom: 5px;
+
+  font-size: 24px;
+
+}
+
+
+
+.titulo-plantas p {
+
+  color: #788178;
+
+}
+
+
+
+/* =========================
+
+   BOTÃO ADICIONAR
+
+\========================= */
+
+
+
+.botao-adicionar-planta {
+
+  padding: 11px 18px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #2e7d32;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+}
+
+
+
+.botao-adicionar-planta:hover {
+
+  background: #256b29;
+
+  transform: translateY(-2px);
+
+}
+
+
+
+/* =========================
+
+   FORMULÁRIO DE PLANTA
+
+\========================= */
+
+
+
+.formulario-planta {
+
+  margin-top: 25px;
+
+  padding: 25px;
+
+  background: #f5faf4;
+
+  border: 1px solid #dce8d9;
+
+  border-radius: 16px;
+
+  text-align: left;
+
+}
+
+
+
+.formulario-planta h3 {
+
+  color: #2e7d32;
+
+  margin-bottom: 18px;
+
+  font-size: 20px;
+
+}
+
+
+
+.formulario-planta input,
+
+.formulario-planta select {
+
+  width: 100%;
+
+  padding: 13px 14px;
+
+  margin-bottom: 12px;
+
+  border: 1px solid #cfdacf;
+
+  border-radius: 10px;
+
+  background: white;
+
+  color: #1f2d1f;
+
+  font-size: 14px;
+
+  outline: none;
+
+}
+
+
+
+.formulario-planta input:focus,
+
+.formulario-planta select:focus {
+
+  border-color: #2e7d32;
+
+}
+
+
+
+.botoes-formulario {
+
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 5px;
+
+}
+
+
+
+.botao-salvar-planta,
+
+.botao-cancelar-planta {
+
+  padding: 11px 18px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+}
+
+
+
+.botao-salvar-planta {
+
+  background: #2e7d32;
+
+  color: white;
+
+}
+
+
+
+.botao-salvar-planta:hover {
+
+  background: #256b29;
+
+}
+
+
+
+.botao-cancelar-planta {
+
+  background: #e0e0e0;
+
+  color: #555;
+
+}
+
+
+
+.botao-cancelar-planta:hover {
+
+  background: #d0d0d0;
+
+}
+
+
+
+/* =========================
+
+   PAINEL DA PLANTA
+
+\========================= */
+
+
+
+.painel-planta {
+
+  margin-top: 25px;
+
+  margin-bottom: 30px;
+
+  background: #f5faf4;
+
+  border: 2px solid #2e7d32;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+
+  box-shadow:
+
+    0 15px 35px
+
+    rgba(46, 125, 50, 0.15);
+
+  animation: aparecer 0.3s ease;
+
+}
+
+
+
+.painel-imagem {
+
+  padding: 30px;
+
+  font-size: 90px;
+
+  text-align: center;
+
+  background: #eaf5e8;
+
+}
+
+
+
+.painel-conteudo {
+
+  padding: 30px;
+
+  width: 100%;
+
+  min-width: 0;
+
+}
+
+
+
+.painel-titulo {
+
+  text-align: left;
+
+  margin-bottom: 25px;
+
+}
+
+
+
+.painel-titulo h2 {
+
+  color: #2e7d32;
+
+  font-size: 28px;
+
+  margin-bottom: 8px;
+
+}
+
+
+
+.painel-titulo p {
+
+  color: #687568;
+
+  line-height: 1.6;
+
+}
+
+
+
+/* =========================
+
+   UMIDADE
+
+\========================= */
+
+
+
+.painel-umidade {
+
+  margin-bottom: 20px;
+
+}
+
+
+
+.umidade-topo {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 10px;
+
+}
+
+
+
+.umidade-topo span {
+
+  color: #687568;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+}
+
+
+
+/* NÚMERO DA UMIDADE */
+
+
+
+.porcentagem-umidade {
+
+  font-size: 22px;
+
+  font-weight: bold;
+
+  transition: color 0.3s ease;
+
+}
+
+
+
+/* BARRA */
+
+
+
+.barra-planta {
+
+  width: 100%;
+
+  height: 12px;
+
+  background: #dce8d9;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+
+}
+
+
+
+.barra-planta-progresso {
+
+  height: 100%;
+
+  border-radius: 20px;
+
+  transition:
+
+    width 0.5s ease,
+
+    background 0.3s ease;
+
+}
+
+
+
+.painel-umidade small {
+
+  display: block;
+
+  margin-top: 8px;
+
+  color: #899489;
+
+  text-align: left;
+
+}
+
+
+
+/* =========================
+
+   STATUS DA UMIDADE
+
+\========================= */
+
+
+
+.status-umidade {
+
+  display: inline-block;
+
+  margin-top: 12px;
+
+  padding: 7px 12px;
+
+  border-radius: 20px;
+
+  font-size: 13px;
+
+  font-weight: bold;
+
+}
+
+
+
+.status-umidade.umidade-baixa {
+
+  background: #ffebee;
+
+  color: #c62828;
+
+}
+
+
+
+.status-umidade.umidade-media {
+
+  background: #fff8e1;
+
+  color: #f57f17;
+
+}
+
+
+
+.status-umidade.umidade-boa {
+
+  background: #e8f5e9;
+
+  color: #2e7d32;
+
+}
+
+
+
+/* =========================
+
+   IRRIGAÇÃO
+
+\========================= */
+
+
+
+.controle-irrigacao {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 18px;
+
+  border-radius: 14px;
+
+  margin-bottom: 18px;
+
+}
+
+
+
+.controle-ligado {
+
+  background: #e8f5e9;
+
+  border: 1px solid #a5d6a7;
+
+}
+
+
+
+.controle-desligado {
+
+  background: #f5f5f5;
+
+  border: 1px solid #dddddd;
+
+}
+
+
+
+.controle-info {
+
+  text-align: left;
+
+}
+
+
+
+.controle-titulo {
+
+  font-size: 13px;
+
+  color: #687568;
+
+  margin-bottom: 5px;
+
+}
+
+
+
+.controle-info strong {
+
+  font-size: 17px;
+
+}
+
+
+
+.controle-ligado strong {
+
+  color: #2e7d32;
+
+}
+
+
+
+.controle-desligado strong {
+
+  color: #777777;
+
+}
+
+
+
+.botao-controle {
+
+  border: none;
+
+  padding: 10px 16px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+
+  transition: 0.2s;
+
+}
+
+
+
+.botao-controle:hover {
+
+  transform: translateY(-2px);
+
+}
+
+
+
+.controle-ligado .botao-controle {
+
+  background: #e53935;
+
+  color: white;
+
+}
+
+
+
+.controle-desligado .botao-controle {
+
+  background: #2e7d32;
+
+  color: white;
+
+}
+
+
+
+/* =========================
+
+   STATUS DO SISTEMA
+
+\========================= */
+
+
+
+.status-planta {
+
+  padding: 14px;
+
+  border-radius: 12px;
+
+  text-align: left;
+
+  font-size: 14px;
+
+  margin-bottom: 25px;
+
+}
+
+
+
+.status-planta-ok {
+
+  background: #e8f5e9;
+
+  color: #2e7d32;
+
+}
+
+
+
+.status-planta span {
+
+  margin-right: 8px;
+
+}
+
+
+
+/* =========================
+
+   INFORMAÇÕES DA PLANTA
+
+\========================= */
+
+
+
+.informacoes-planta-selecionada {
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  width: 100%;
+
+  margin-top: 30px;
+
+  padding-top: 25px;
+
+  border-top: 1px solid #dce8d9;
+
+}
+
+
+
+.info-item {
+
+  padding: 5px 25px;
+
+  text-align: center;
+
+  border-right: 1px solid #dce8d9;
+
+}
+
+
+
+.info-item:last-child {
+
+  border-right: none;
+
+}
+
+
+
+.info-item > span {
+
+  display: block;
+
+  color: #718071;
+
+  font-size: 12px;
+
+  font-weight: bold;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.6px;
+
+  margin-bottom: 8px;
+
+}
+
+
+
+.info-item strong {
+
+  display: block;
+
+  color: #2e7d32;
+
+  font-size: 21px;
+
+  margin-bottom: 5px;
+
+  line-height: 1.3;
+
+}
+
+
+
+.info-item small {
+
+  display: block;
+
+  color: #9aa59a;
+
+  font-size: 11px;
+
+  line-height: 1.4;
+
+}
+
+
+
+/* =========================
+
+   LISTA DE PLANTAS
+
+\========================= */
+
+
+
+.lista-plantas {
+
+  margin-top: 25px;
+
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 20px;
+
+  text-align: left;
+
+}
+
+
+
+.planta-card {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  padding: 20px;
+
+  background: #f8fbf7;
+
+  border: 2px solid transparent;
+
+  border-radius: 16px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+}
+
+
+
+.planta-card:hover {
+
+  transform: translateY(-3px);
+
+  border-color: #a5d6a7;
+
+  box-shadow:
+
+    0 8px 20px
+
+    rgba(40, 80, 40, 0.08);
+
+}
+
+
+
+.planta-card-selecionada {
+
+  border-color: #256b29;
+
+  background: #e4f3e2;
+
+}
+
+
+
+.imagem-planta {
+
+  width: 65px;
+
+  height: 65px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #e8f5e9;
+
+  border-radius: 14px;
+
+  font-size: 38px;
+
+}
+
+
+
+.informacoes-planta {
+
+  min-width: 0;
+
+}
+
+
+
+.informacoes-planta h3 {
+
+  color: #2e7d32;
+
+  margin-bottom: 6px;
+
+  font-size: 18px;
+
+}
+
+
+
+.descricao {
+
+  color: #788178;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+}
+
+
+
+/* =========================
+
+   AÇÕES DA PLANTA
+
+\========================= */
+
+
+
+.area-acoes-planta {
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 25px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #dce8d9;
+
+}
+
+
+
+.botao-editar-planta {
+
+  padding: 11px 18px;
+
+  border: 1px solid #a5d6a7;
+
+  border-radius: 10px;
+
+  background: #e8f5e9;
+
+  color: #2e7d32;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+}
+
+
+
+.botao-editar-planta:hover {
+
+  background: #c8e6c9;
+
+  transform: translateY(-2px);
+
+}
+
+
+
+.botao-excluir-planta {
+
+  padding: 11px 18px;
+
+  border: 1px solid #ef9a9a;
+
+  border-radius: 10px;
+
+  background: #ffebee;
+
+  color: #c62828;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+}
+
+
+
+.botao-excluir-planta:hover {
+
+  background: #ffcdd2;
+
+  border-color: #e57373;
+
+  transform: translateY(-2px);
+
+}
+
+
+
+/* =========================
+
+   FORMULÁRIO DE EDIÇÃO
+
+\========================= */
+
+
+
+.formulario-edicao {
+
+  text-align: left;
+
+  margin-bottom: 25px;
+
+}
+
+
+
+.formulario-edicao h3 {
+
+  color: #2e7d32;
+
+  font-size: 22px;
+
+  margin-bottom: 20px;
+
+}
+
+
+
+.formulario-edicao label {
+
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #687568;
+
+  font-size: 13px;
+
+  font-weight: bold;
+
+}
+
+
+
+.formulario-edicao input,
+
+.formulario-edicao select {
+
+  width: 100%;
+
+  padding: 13px 14px;
+
+  margin-bottom: 15px;
+
+  border: 1px solid #cfdacf;
+
+  border-radius: 10px;
+
+  background: white;
+
+  color: #1f2d1f;
+
+  font-size: 14px;
+
+  outline: none;
+
+}
+
+
+
+.formulario-edicao input:focus,
+
+.formulario-edicao select:focus {
+
+  border-color: #2e7d32;
+
+}
+
+
+
+.botoes-edicao {
+
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 5px;
+
+}
+
+
+
+.botao-salvar-edicao,
+
+.botao-cancelar-edicao {
+
+  padding: 11px 18px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+}
+
+
+
+.botao-salvar-edicao {
+
+  background: #2e7d32;
+
+  color: white;
+
+}
+
+
+
+.botao-salvar-edicao:hover {
+
+  background: #256b29;
+
+}
+
+
+
+.botao-cancelar-edicao {
+
+  background: #e0e0e0;
+
+  color: #555;
+
+}
+
+
+
+.botao-cancelar-edicao:hover {
+
+  background: #d0d0d0;
+
+}
+
+
+
+/* =========================
+
+   NENHUMA PLANTA
+
+\========================= */
+
+
+
+.sem-plantas {
+
+  grid-column: 1 / -1;
+
+  padding: 40px 20px;
+
+  text-align: center;
+
+  background: #f8fbf7;
+
+  border-radius: 16px;
+
+  border: 1px dashed #c8d8c5;
+
+}
+
+
+
+.sem-plantas h3 {
+
+  color: #2e7d32;
+
+  margin-bottom: 8px;
+
+}
+
+
+
+.sem-plantas p {
+
+  color: #788178;
+
+}
+
+
+
+/* =========================
+
+   ANIMAÇÃO
+
+\========================= */
+
+
+
+@keyframes aparecer {
+
+  from {
+
+    opacity: 0;
+
+    transform: translateY(-10px);
+
+  }
+
+
+
+  to {
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+  }
+
+}
+
+
+
+/* =========================
+
+   RESPONSIVO
+
+\========================= */
+
+
+
+@media (max-width: 700px) {
+
+
+
+  .header {
+
+    padding: 30px 15px;
+
+  }
+
+
+
+  .header h1 {
+
+    font-size: 34px;
+
+  }
+
+
+
+  .dashboard {
+
+    width: 94%;
+
+    margin: 25px auto;
+
+  }
+
+
+
+  .card {
+
+    padding: 20px;
+
+  }
+
+
+
+  .titulo-plantas {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 15px;
+
+  }
+
+
+
+  .botao-adicionar-planta {
+
+    width: 100%;
+
+  }
+
+
+
+  .painel-imagem {
+
+    font-size: 70px;
+
+    padding: 25px;
+
+  }
+
+
+
+  .painel-conteudo {
+
+    padding: 20px;
+
+  }
+
+
+
+  .controle-irrigacao {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 15px;
+
+  }
+
+
+
+  .botao-controle {
+
+    width: 100%;
+
+  }
+
+
+
+  .informacoes-planta-selecionada {
+
+    grid-template-columns: 1fr;
+
+  }
+
+
+
+  .info-item {
+
+    padding: 15px;
+
+    border-right: none;
+
+    border-bottom: 1px solid #dce8d9;
+
+  }
+
+
+
+  .info-item:last-child {
+
+    border-bottom: none;
+
+  }
+
+
+
+  .lista-plantas {
+
+    grid-template-columns: 1fr;
+
+  }
+
+
+
+  .planta-card {
+
+    padding: 15px;
+
+  }
+
+
+
+  .botoes-formulario {
+
+    flex-direction: column;
+
+  }
+
+
+
+  .botao-salvar-planta,
+
+  .botao-cancelar-planta {
+
+    width: 100%;
+
+  }
+
+
+
+  .area-acoes-planta {
+
+    flex-direction: column;
+
+  }
+
+
+
+  .botao-editar-planta,
+
+  .botao-excluir-planta {
+
+    width: 100%;
+
+  }
+
+
+
+  .botoes-edicao {
+
+    flex-direction: column;
+
+  }
+
+
+
+  .botao-salvar-edicao,
+
+  .botao-cancelar-edicao {
+
+    width: 100%;
+
+  }
+
+}
+
+
+
+
+
+/* =========================
+
+   LAYOUT PRINCIPAL COM IA
+
+\========================= */
+
+
+
+.dashboard {
+
+  width: min(1500px, 96%);
+
+  margin: 35px auto;
+
+}
+
+
+
+.dashboard-layout {
+
+  display: grid;
+
+  grid-template-columns: minmax(0, 1.5fr) minmax(340px, 0.85fr);
+
+  align-items: start;
+
+  gap: 22px;
+
+}
+
+
+
+.plantas-card {
+
+  min-width: 0;
+
+}
+
+
+
+.dashboard-assistente {
+
+  min-width: 0;
+
+  position: sticky;
+
+  top: 20px;
+
+}
+
+
+
+.dashboard-assistente .assistente-container {
+
+  margin-top: 0;
+
+}
+
+
+
+.dashboard-assistente .assistente-mensagens {
+
+  height: min(55vh, 520px);
+
+  min-height: 360px;
+
+}
+
+
+
+.dashboard-assistente .assistente-contexto {
+
+  margin-top: 12px;
+
+}
+
+
+
+.titulo-plantas {
+
+  flex-wrap: wrap;
+
+  gap: 15px;
+
+}
+
+
+
+.botao-adicionar-planta {
+
+  white-space: nowrap;
+
+}
+
+
+
+/* =========================
+
+   RESPONSIVIDADE
+
+\========================= */
+
+
+
+@media (max-width: 1000px) {
+
+  .dashboard-layout {
+
+    grid-template-columns: minmax(0, 1fr);
+
+  }
+
+
+
+  .dashboard-assistente {
+
+    position: static;
+
+    width: 100%;
+
+  }
+
+
+
+  .dashboard-assistente .assistente-mensagens {
+
+    height: 400px;
+
+  }
+
+}
+
+
+
+@media (max-width: 600px) {
+
+  .dashboard {
+
+    width: 94%;
+
+    margin: 20px auto;
+
+  }
+
+
+
+  .dashboard-layout {
+
+    gap: 18px;
+
+  }
+
+
+
+  .titulo-plantas {
+
+    align-items: stretch;
+
+  }
+
+
+
+  .botao-adicionar-planta {
+
+    width: 100%;
+
+  }
+
+
+
+  .dashboard-assistente .assistente-mensagens {
+
+    height: 350px;
+
+    min-height: 300px;
+
+  }
+
+}
+
+
+/* =========================
+   MAPA DAS PLANTAS
+========================= */
+
+.mapa-plantas-secao {
+  margin-top: 28px;
+  padding: 22px;
+  text-align: left;
+  background: #f8fbf7;
+  border: 1px solid #dce8d9;
+  border-radius: 18px;
+}
+
+.mapa-plantas-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.mapa-plantas-cabecalho h2 {
+  margin-bottom: 6px;
+  color: #2e7d32;
+  font-size: 22px;
+}
+
+.mapa-plantas-cabecalho p {
+  color: #788178;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.botao-atualizar-localizacao {
+  flex-shrink: 0;
+  padding: 11px 16px;
+  border: 0;
+  border-radius: 10px;
+  background: #2e7d32;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.botao-atualizar-localizacao:hover {
+  background: #256b29;
+  transform: translateY(-1px);
+}
+
+.botao-atualizar-localizacao:disabled {
+  opacity: 0.65;
+  cursor: wait;
+  transform: none;
+}
+
+.mapa-plantas {
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+  border: 1px solid #dce8d9;
+  border-radius: 14px;
+  z-index: 0;
+}
+
+.mapa-plantas .leaflet-container {
+  width: 100%;
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  z-index: 0;
+}
+
+.mapa-estado,
+.mapa-erro {
+  padding: 22px;
+  border-radius: 12px;
+  background: #eaf5e8;
+  color: #2e7d32;
+  line-height: 1.6;
+}
+
+.mapa-erro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: #ffebee;
+  color: #b71c1c;
+}
+
+.marcador-planta-container {
+  background: transparent;
+  border: 0;
+}
+
+.marcador-planta,
+.marcador-usuario {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid white;
+  border-radius: 50% 50% 50% 0;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.28);
+  transform: rotate(-45deg);
+  font-size: 19px;
+}
+
+.marcador-planta {
+  background: #2e7d32;
+}
+
+.marcador-planta::first-letter {
+  transform: rotate(45deg);
+}
+
+.marcador-usuario {
+  background: #1976d2;
+  color: white;
+  font-size: 15px;
+}
+
+.popup-planta {
+  display: flex;
+  min-width: 150px;
+  flex-direction: column;
+  gap: 5px;
+  color: #1f2d1f;
+}
+
+.popup-planta strong {
+  color: #2e7d32;
+  font-size: 15px;
+}
+
+.popup-planta span,
+.popup-planta small {
+  font-size: 12px;
+}
+
+.mapa-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 14px 0;
+  color: #687568;
+  font-size: 13px;
+}
+
+.mapa-legenda span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.mapa-legenda i {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.legenda-usuario {
+  background: #1976d2;
+}
+
+.legenda-planta {
+  background: #2e7d32;
+}
+
+.mapa-lista-demonstracao {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.mapa-item-planta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 13px;
+  border: 1px solid #dce8d9;
+  border-radius: 12px;
+  background: white;
+}
+
+.mapa-item-planta div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mapa-item-planta strong {
+  color: #2e7d32;
+  font-size: 14px;
+}
+
+.mapa-item-planta small {
+  color: #788178;
+  font-size: 12px;
+}
+
+.mapa-item-planta > span {
+  color: #1f2d1f;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.mapa-aviso {
+  margin-top: 14px;
+  color: #899489;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+  .mapa-plantas-secao {
+    padding: 16px;
+  }
+
+  .mapa-plantas-cabecalho {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .botao-atualizar-localizacao {
+    width: 100%;
+  }
+
+  .mapa-plantas {
+    height: 340px;
+  }
+
+  .mapa-lista-demonstracao {
+    grid-template-columns: 1fr;
+  }
+
+  .mapa-erro {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+/* LOCALIZAÇÃO NO CADASTRO */
+.titulo-localizacao-form {
+  margin: 18px 0 12px;
+  color: #2e7d32;
+  font-size: 16px;
+}
+
+.formulario-planta label,
+.formulario-edicao label {
+  display: block;
+  margin: 8px 0 6px;
+  color: #536353;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.campos-localizacao-linha {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.campos-localizacao-linha > div {
+  min-width: 0;
+}
+
+.ajuda-localizacao {
+  display: block;
+  margin: 2px 0 12px;
+  color: #788178;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.formulario-planta button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+/* MAPA COM PLANTAS CADASTRADAS */
+.mapa-plantas-secao {
+  width: 100%;
+  margin-top: 24px;
+  padding: 26px;
+  background: #fff;
+  border: 1px solid #dce8d9;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(40, 80, 40, 0.08);
+  text-align: left;
+}
+
+.mapa-plantas-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.mapa-plantas-cabecalho h2 {
+  margin: 0 0 6px;
+  color: #2e7d32;
+  font-size: 22px;
+}
+
+.mapa-plantas-cabecalho p {
+  color: #788178;
+  font-size: 14px;
+}
+
+.mapa-contador-plantas {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mapa-plantas {
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+  border: 1px solid #dce8d9;
+  border-radius: 14px;
+  z-index: 0;
+}
+
+.mapa-plantas .leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.marcador-planta-container {
+  background: transparent;
+  border: 0;
+}
+
+.marcador-planta-real {
+  display: flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #2e7d32;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.28);
+  font-size: 21px;
+}
+
+.popup-planta-real {
+  display: flex;
+  max-width: 230px;
+  flex-direction: column;
+  gap: 5px;
+  color: #1f2d1f;
+}
+
+.popup-planta-real strong {
+  color: #2e7d32;
+  font-size: 15px;
+}
+
+.popup-planta-real span,
+.popup-planta-real small {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.mapa-legenda-real {
+  margin: 12px 0;
+  color: #687568;
+  font-size: 12px;
+}
+
+.mapa-legenda-real span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mapa-legenda-real i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #2e7d32;
+}
+
+.mapa-lista-real {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mapa-item-real {
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+  padding: 13px;
+  border: 1px solid #dce8d9;
+  border-radius: 12px;
+  background: #f8fbf7;
+}
+
+.mapa-item-real:hover {
+  border-color: #9fbd9b;
+  background: #f0f7ee;
+}
+
+.mapa-item-real:focus-visible {
+  outline: 3px solid #2e7d32;
+  outline-offset: 2px;
+}
+
+.mapa-item-real div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.mapa-item-real strong {
+  color: #2e7d32;
+  font-size: 14px;
+}
+
+.mapa-item-real small,
+.mapa-item-real > span {
+  color: #788178;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.mapa-sem-plantas {
+  display: flex;
+  min-height: 230px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+  border: 1px dashed #b9d2b7;
+  border-radius: 14px;
+  background: #f8fbf7;
+  text-align: center;
+}
+
+.mapa-sem-plantas-icone {
+  display: flex;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  border-radius: 50%;
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-size: 27px;
+}
+
+.mapa-sem-plantas h3 {
+  margin-bottom: 7px;
+  color: #2e7d32;
+  font-size: 17px;
+}
+
+.mapa-sem-plantas p,
+.mapa-sem-plantas small,
+.mapa-aviso-real {
+  max-width: 620px;
+  color: #788178;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.mapa-sem-plantas small {
+  margin-top: 10px;
+}
+
+.mapa-aviso-real {
+  margin-top: 13px;
+}
+
+@media (max-width: 700px) {
+  .campos-localizacao-linha,
+  .mapa-lista-real {
+    grid-template-columns: 1fr;
+  }
+
+  .mapa-plantas-secao {
+    padding: 17px;
+  }
+
+  .mapa-plantas-cabecalho {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .mapa-plantas {
+    height: 340px;
+  }
+}
+
+
+/* Destaque da planta selecionada no mapa */
+
+.marcador-planta-container {
+  background: transparent;
+  border: none;
+}
+
+.marcador-planta-real {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #b7ff35;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  font-size: 23px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+
+.marcador-planta-destaque {
+  width: 64px;
+  height: 64px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marcador-planta-destaque .marcador-planta-real {
+  width: 50px;
+  height: 50px;
+  font-size: 27px;
+  border: 3px solid #b7ff35;
+  box-shadow:
+    0 0 0 4px rgba(183, 255, 53, 0.25),
+    0 0 22px rgba(183, 255, 53, 0.9);
+}
+
+.marcador-planta-pulso {
+  position: absolute;
+  width: 62px;
+  height: 62px;
+  border: 3px solid #b7ff35;
+  border-radius: 50%;
+  animation: pulsar-planta 1.8s infinite;
+}
+
+@keyframes pulsar-planta {
+  0% {
+    transform: scale(0.65);
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Identificação da planta selecionada */
+
+.mapa-planta-selecionada {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  background: rgba(183, 255, 53, 0.09);
+  border: 1px solid rgba(183, 255, 53, 0.5);
+  border-radius: 12px;
+}
+
+.mapa-planta-selecionada-icone {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #b7ff35;
+  border-radius: 50%;
+  font-size: 22px;
+}
+
+.mapa-planta-selecionada div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mapa-planta-selecionada strong {
+  color: #b7ff35;
+  font-size: 15px;
+}
+
+.mapa-planta-selecionada small {
+  color: #a8a8a8;
+  font-size: 12px;
+}
+
+/* Legenda */
+
+.mapa-legenda-selecionada {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.mapa-legenda-selecionada i {
+  background: #b7ff35 !important;
+  box-shadow: 0 0 8px rgba(183, 255, 53, 0.8);
+}
+
+/* Planta selecionada na lista do mapa */
+
+.mapa-item-real-selecionado {
+  border: 1px solid #b7ff35 !important;
+  background: rgba(183, 255, 53, 0.08) !important;
+}
+
+.mapa-item-status {
+  color: #b7ff35 !important;
+  font-weight: 700;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.popup-planta-status {
+  color: #398b13;
+  font-weight: bold;
+}
+
+
+/* SIMULACAO DE ALERTA DE IRRIGACAO NO MAPA */
+.mapa-simulacao-controles {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 10px;
+  padding: 14px 16px;
+  border: 1px dashed #b9cfb5;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.mapa-simulacao-controles > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mapa-simulacao-controles strong {
+  color: #2e7d32;
+  font-size: 14px;
+}
+
+.mapa-simulacao-controles small,
+.mapa-simulacao-ajuda {
+  color: #788178;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.botao-simular-irrigacao,
+.botao-encerrar-simulacao {
+  flex-shrink: 0;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 9px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.botao-simular-irrigacao {
+  background: #c62828;
+}
+
+.botao-simular-irrigacao:hover:not(:disabled) {
+  background: #a91f1f;
+  transform: translateY(-1px);
+}
+
+.botao-simular-irrigacao:disabled {
+  background: #b7b7b7;
+  cursor: not-allowed;
+}
+
+.botao-encerrar-simulacao {
+  background: #526052;
+}
+
+.botao-encerrar-simulacao:hover {
+  background: #394739;
+  transform: translateY(-1px);
+}
+
+.mapa-simulacao-ajuda {
+  margin: 0 0 12px;
+}
+
+.mapa-alerta-irrigacao {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 14px;
+  padding: 14px 16px;
+  border: 1px solid #ef9a9a;
+  border-radius: 12px;
+  background: #ffebee;
+  color: #b71c1c;
+  animation: mapa-alerta-entrada 0.25s ease;
+}
+
+.mapa-alerta-irrigacao-icone {
+  display: flex;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #c62828;
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.mapa-alerta-irrigacao div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mapa-alerta-irrigacao strong {
+  font-size: 14px;
 }
 
 .mapa-alerta-irrigacao small {
@@ -116,3 +2627,470 @@
 .clima-mensagem { padding: 16px; border-radius: 12px; background: #eaf5e8; color: #2e7d32; font-size: 13px; line-height: 1.5; }
 .clima-mensagem.clima-erro { background: #fff8e1; color: #8a6500; }
 @media (max-width: 600px) { .clima-card { padding: 16px; } .clima-cabecalho { flex-direction: column; } .clima-indicadores { gap: 7px; } .clima-indicadores strong { font-size: 15px; } }
+
+.umidade-indisponivel { background: #eef1ed; color: #657065; }
+.status-planta-aviso { background: #fff8e1; color: #8a6500; }
+
+/* Acabamento visual do dashboard */
+body {
+  background:
+    radial-gradient(ellipse at 8% 4%, rgba(194, 225, 174, 0.24), transparent 30rem),
+    #f3f7f0;
+  color: #25352a;
+}
+
+.header {
+  position: relative;
+  overflow: hidden;
+  padding: 30px 20px 26px;
+  background: linear-gradient(120deg, #ffffff 15%, #f1f8ed 100%);
+  box-shadow: 0 8px 28px rgba(47, 86, 48, 0.06);
+}
+
+.header::after {
+  position: absolute;
+  top: -95px;
+  right: max(4vw, calc((100vw - 1180px) / 2));
+  width: 230px;
+  height: 230px;
+  border: 1px solid rgba(78, 137, 73, 0.1);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(216, 239, 206, 0.38), rgba(216, 239, 206, 0) 70%);
+  content: "";
+  pointer-events: none;
+}
+
+.header h1 {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 6px;
+  color: #286a3b;
+  font-size: clamp(32px, 4vw, 42px);
+  letter-spacing: -1.6px;
+}
+
+.header h1::before {
+  margin-right: 9px;
+  content: "🌱";
+  font-size: 0.72em;
+  vertical-align: 0.08em;
+}
+
+.header p {
+  position: relative;
+  z-index: 1;
+  color: #6d7e6f;
+  font-size: 15px;
+}
+
+.dashboard {
+  width: min(1220px, 94%);
+  margin: 30px auto 52px;
+}
+
+.dashboard-layout {
+  gap: 24px;
+}
+
+.card,
+.dashboard-assistente .assistente-container {
+  border: 1px solid #e1eadf;
+  border-radius: 22px;
+  box-shadow: 0 14px 38px rgba(43, 77, 45, 0.075);
+}
+
+.card {
+  padding: clamp(20px, 3vw, 32px);
+}
+
+.titulo-plantas h2,
+.painel-titulo h2 {
+  color: #285f37;
+  letter-spacing: -0.6px;
+}
+
+.titulo-plantas p {
+  margin-top: 5px;
+  color: #78877a;
+  line-height: 1.5;
+}
+
+.botao-adicionar-planta,
+.botao-controle,
+.botao-sair {
+  border-radius: 12px;
+  box-shadow: 0 5px 12px rgba(39, 95, 52, 0.14);
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.botao-adicionar-planta {
+  background: linear-gradient(135deg, #38834b, #28683a);
+}
+
+.botao-adicionar-planta:hover,
+.botao-controle:hover,
+.botao-sair:hover {
+  box-shadow: 0 8px 18px rgba(39, 95, 52, 0.2);
+}
+
+.planta-card {
+  border: 1px solid #e5ede2;
+  background: linear-gradient(145deg, #ffffff, #f7fbf5);
+  box-shadow: 0 5px 16px rgba(43, 77, 45, 0.035);
+}
+
+.planta-card:hover {
+  border-color: #a9cda5;
+  box-shadow: 0 12px 24px rgba(43, 77, 45, 0.1);
+}
+
+.planta-card-selecionada {
+  border-color: #75ae72;
+  background: linear-gradient(145deg, #f1f9ee, #e7f4e3);
+  box-shadow: inset 0 0 0 1px rgba(66, 133, 64, 0.08);
+}
+
+.imagem-planta {
+  border: 1px solid #e4efe1;
+  background: linear-gradient(145deg, #e8f5e5, #dcefd7);
+}
+
+.painel-planta {
+  border: 1px solid #d8e8d4;
+  border-radius: 20px;
+  box-shadow: 0 12px 28px rgba(47, 98, 49, 0.09);
+}
+
+.painel-umidade {
+  padding: 18px;
+  border: 1px solid #e5ede2;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #ffffff, #f8fbf6);
+}
+
+.barra-planta {
+  height: 10px;
+  background: #e7eee4;
+}
+
+.barra-planta-progresso {
+  border-radius: inherit;
+}
+
+.status-umidade {
+  padding: 7px 11px;
+}
+
+.status-planta {
+  border: 1px solid transparent;
+  line-height: 1.5;
+}
+
+.status-planta-ok {
+  border-color: #d5ead2;
+}
+
+.status-planta-aviso {
+  border-color: #f0dfae;
+}
+
+.clima-card {
+  border-color: #e1eadf;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(43, 77, 45, 0.04);
+}
+
+.mapa-plantas-secao {
+  border-color: #e1eadf;
+  border-radius: 20px;
+  box-shadow: 0 10px 26px rgba(43, 77, 45, 0.06);
+}
+
+.mapa-planta-selecionada {
+  border-color: #d7e8d2;
+  background: #f2f8ef;
+}
+
+.mapa-planta-selecionada strong,
+.mapa-planta-selecionada small {
+  color: #32683c;
+}
+
+.mapa-planta-selecionada-icone {
+  background: #e1f0dc;
+}
+
+.mapa-item-real-selecionado {
+  border-color: #78ad72 !important;
+  background: #f0f8ed !important;
+}
+
+.mapa-item-status {
+  color: #367543 !important;
+}
+
+.dashboard-assistente .assistente-container {
+  overflow: hidden;
+  box-shadow: 0 14px 38px rgba(43, 77, 45, 0.075);
+}
+
+:where(button, a, textarea, input, select):focus-visible {
+  outline: 3px solid rgba(57, 132, 70, 0.45);
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .dashboard {
+    width: min(100% - 24px, 540px);
+    margin-top: 18px;
+  }
+
+  .header {
+    padding: 24px 16px 20px;
+  }
+
+  .titulo-plantas {
+    align-items: stretch;
+  }
+
+  .botao-adicionar-planta {
+    width: 100%;
+  }
+
+  .painel-umidade {
+    padding: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.dashboard-hero {
+  position: relative;
+  display: flex;
+  min-height: 250px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  padding: clamp(26px, 5vw, 52px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  background: linear-gradient(112deg, #173f2b 0%, #235b39 53%, #39804b 100%);
+  box-shadow: 0 20px 42px rgba(28, 74, 43, 0.2);
+  color: #ffffff;
+  isolation: isolate;
+}
+
+.dashboard-hero::before,
+.dashboard-hero::after {
+  position: absolute;
+  z-index: -1;
+  border: 1px solid rgba(229, 247, 218, 0.14);
+  border-radius: 50%;
+  content: "";
+}
+
+.dashboard-hero::before {
+  top: -180px;
+  right: 9%;
+  width: 430px;
+  height: 430px;
+}
+
+.dashboard-hero::after {
+  top: -116px;
+  right: 14%;
+  width: 300px;
+  height: 300px;
+}
+
+.dashboard-hero-copy {
+  max-width: 600px;
+}
+
+.dashboard-hero-eyebrow {
+  display: inline-flex;
+  margin-bottom: 15px;
+  color: #c3e3bd;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+}
+
+.dashboard-hero h2 {
+  max-width: 580px;
+  color: #ffffff;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 750;
+  letter-spacing: -1.4px;
+  line-height: 1.12;
+}
+
+.dashboard-hero-copy > p {
+  max-width: 490px;
+  margin-top: 13px;
+  color: rgba(243, 250, 239, 0.78);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.dashboard-hero-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 21px;
+  padding: 8px 12px;
+  border: 1px solid rgba(235, 248, 229, 0.2);
+  border-radius: 999px;
+  background: rgba(12, 42, 25, 0.2);
+  color: #f1f8ed;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.dashboard-hero-status i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f4cb69;
+  box-shadow: 0 0 0 4px rgba(244, 203, 105, 0.13);
+}
+
+.dashboard-hero-status.conectado i {
+  background: #8ee09b;
+  box-shadow: 0 0 0 4px rgba(142, 224, 155, 0.14);
+}
+
+.dashboard-hero-art {
+  position: relative;
+  display: grid;
+  width: 260px;
+  min-width: 220px;
+  height: 190px;
+  place-items: center;
+}
+
+.dashboard-hero-count {
+  display: flex;
+  width: 175px;
+  height: 175px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(239, 249, 232, 0.2), rgba(215, 239, 202, 0.08));
+  box-shadow: inset 0 0 35px rgba(238, 249, 229, 0.08), 0 14px 30px rgba(12, 42, 25, 0.12);
+  backdrop-filter: blur(5px);
+}
+
+.dashboard-hero-count span,
+.dashboard-hero-count small {
+  color: rgba(246, 251, 241, 0.78);
+  font-size: 11px;
+}
+
+.dashboard-hero-count strong {
+  margin: 3px 0;
+  color: #ffffff;
+  font-size: 54px;
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1;
+}
+
+.dashboard-hero-leaf {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 15px;
+  background: rgba(247, 252, 242, 0.14);
+  box-shadow: 0 8px 20px rgba(12, 42, 25, 0.12);
+  font-size: 25px;
+  backdrop-filter: blur(6px);
+}
+
+.dashboard-hero-leaf.leaf-one {
+  top: 12px;
+  right: 15px;
+  transform: rotate(9deg);
+}
+
+.dashboard-hero-leaf.leaf-two {
+  bottom: 5px;
+  left: 0;
+  transform: rotate(-9deg);
+}
+
+@media (max-width: 700px) {
+  .dashboard-hero {
+    min-height: auto;
+    padding: 28px 24px;
+    border-radius: 22px;
+  }
+
+  .dashboard-hero-art {
+    width: 145px;
+    min-width: 145px;
+    height: 145px;
+    margin-right: -8px;
+  }
+
+  .dashboard-hero-count {
+    width: 125px;
+    height: 125px;
+  }
+
+  .dashboard-hero-count strong {
+    font-size: 42px;
+  }
+
+  .dashboard-hero-leaf {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 520px) {
+  .dashboard-hero {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+    padding: 27px 22px 19px;
+  }
+
+  .dashboard-hero h2 {
+    font-size: 30px;
+  }
+
+  .dashboard-hero-art {
+    align-self: flex-end;
+    height: 112px;
+    margin-top: -5px;
+  }
+
+  .dashboard-hero-count {
+    width: 108px;
+    height: 108px;
+  }
+
+  .dashboard-hero-leaf.leaf-two {
+    left: 14px;
+    bottom: 0;
+  }
+}

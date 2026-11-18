@@ -28,6 +28,10 @@ function AssistenteIA({ planta, umidade, aoFechar }) {
     const textoLimpo = texto.trim();
 
     if (!textoLimpo || carregando) return;
+    if (textoLimpo.length > 1000) {
+      setErro("A pergunta deve ter no máximo 1.000 caracteres.");
+      return;
+    }
 
     const novasMensagens = [
       ...mensagens,
@@ -49,6 +53,7 @@ function AssistenteIA({ planta, umidade, aoFechar }) {
           body: {
             mensagens: novasMensagens
               .filter((mensagem) => mensagem.role !== "system")
+              .slice(-12)
               .map(({ role, content }) => ({ role, content })),
 
             planta: planta
@@ -56,7 +61,7 @@ function AssistenteIA({ planta, umidade, aoFechar }) {
                   nome: planta.nome,
                   tipo: planta.tipo,
                   umidade:
-                    Number.isFinite(Number(umidade))
+                    umidade !== null && Number.isFinite(Number(umidade))
                       ? Number(umidade)
                       : null,
                   umidadeIdeal:
@@ -274,7 +279,7 @@ function AssistenteIA({ planta, umidade, aoFechar }) {
           placeholder="Digite sua dúvida sobre plantas..."
           rows={2}
           disabled={carregando}
-          maxLength={4000}
+          maxLength={1000}
         />
 
         <button

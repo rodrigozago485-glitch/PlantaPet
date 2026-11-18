@@ -107,7 +107,9 @@ function descricaoDoClima(codigo) {
 
 function Plantapet({ usuario, aoSair }) {
 
-  const [umidade, setUmidade] = useState(0);
+  const [umidade, setUmidade] = useState(null);
+  const [sensorConectado, setSensorConectado] = useState(false);
+  const [atualizadoSensor, setAtualizadoSensor] = useState(null);
   const [simularAlertaIrrigacao, setSimularAlertaIrrigacao] = useState(false);
 
   const [irrigando, setIrrigando] = useState(false);
@@ -176,7 +178,7 @@ function Plantapet({ usuario, aoSair }) {
 
       try {
 
-        const resposta = await fetch("http://172.24.3.237/umidade");
+        const resposta = await fetch("http://172.24.3.237/umidade", { signal: AbortSignal.timeout(2500) });
 
 
 
@@ -197,12 +199,15 @@ function Plantapet({ usuario, aoSair }) {
         if (Number.isFinite(leitura) && leitura >= 0 && leitura <= 100) {
 
           setUmidade(leitura);
+          setSensorConectado(true);
+          setAtualizadoSensor(new Date());
 
         }
 
       } catch (erro) {
 
-        console.error("Erro ao conectar com o ESP32:", erro);
+        setSensorConectado(false);
+        setUmidade(null);
 
       }
 
@@ -377,6 +382,7 @@ function Plantapet({ usuario, aoSair }) {
   function selecionarPlanta(planta) {
 
     setPlantaSelecionada(planta);
+    setSimularAlertaIrrigacao(false);
 
     setIrrigando(false);
 
@@ -411,6 +417,7 @@ function Plantapet({ usuario, aoSair }) {
 
 
   function obterStatusUmidade() {
+    if (umidade === null) return { texto: 'Aguardando leitura', classe: 'umidade-indisponivel' };
 
     if (umidade < 30) {
 
@@ -457,6 +464,7 @@ function Plantapet({ usuario, aoSair }) {
 
 
   function obterCorUmidade() {
+    if (umidade === null) return '#899489';
 
     if (umidade < 30) return "#e53935";
 
@@ -858,7 +866,7 @@ function Plantapet({ usuario, aoSair }) {
 
 
 
-        <p>Olá, {usuario.nome}! Cuide das suas plantas.</p>
+        <p>Vamos cuidar das suas plantas!</p>
 
 
 
@@ -873,6 +881,31 @@ function Plantapet({ usuario, aoSair }) {
 
 
       <main className="dashboard">
+
+        <section className="dashboard-hero" aria-label="Resumo do jardim">
+          <div className="dashboard-hero-copy">
+            <span className="dashboard-hero-eyebrow">SEU JARDIM, EM UM SÓ LUGAR</span>
+            <h2>Um pouco de cuidado faz tudo florescer.</h2>
+            <p>
+              {plantaSelecionada
+                ? `Acompanhe ${plantaSelecionada.nome} e mantenha sua rotina de cuidados em dia.`
+                : "Organize suas plantas e acompanhe os cuidados em um só lugar."}
+            </p>
+            <span className={`dashboard-hero-status ${sensorConectado ? "conectado" : "demonstracao"}`}>
+              <i aria-hidden="true" />
+              {sensorConectado ? "Sensor conectado" : "Modo de demonstração"}
+            </span>
+          </div>
+          <div className="dashboard-hero-art" aria-hidden="true">
+            <span className="dashboard-hero-leaf leaf-one">🌿</span>
+            <span className="dashboard-hero-leaf leaf-two">🌱</span>
+            <div className="dashboard-hero-count">
+              <span>Seu jardim</span>
+              <strong>{plantas.length}</strong>
+              <small>{plantas.length === 1 ? "planta cadastrada" : "plantas cadastradas"}</small>
+            </div>
+          </div>
+        </section>
 
         <div className="dashboard-layout">
 
@@ -1226,7 +1259,7 @@ function Plantapet({ usuario, aoSair }) {
 
                       >
 
-                        {umidade}%
+                        {umidade === null ? "—" : `${umidade}%`}
 
                       </strong>
 
@@ -1242,7 +1275,7 @@ function Plantapet({ usuario, aoSair }) {
 
                         style={{
 
-                          width: `${umidade}%`,
+                          width: umidade === null ? "0%" : `${umidade}%`,
 
                           background: corUmidade,
 
@@ -1262,7 +1295,7 @@ function Plantapet({ usuario, aoSair }) {
 
 
 
-                    <small>Leitura recebida do ESP32</small>
+                    <small>{sensorConectado ? `Leitura real do ESP32${atualizadoSensor ? ` às ${atualizadoSensor.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}` : ""}` : "Sem conexão com o ESP32. Aguardando leitura real."}</small>
 
                   </div>
 
@@ -1284,9 +1317,9 @@ function Plantapet({ usuario, aoSair }) {
 
                     <div className="controle-info">
 
-                      <div className="controle-titulo">Irrigação</div>
+                      <div className="controle-titulo">Irrigação (simulação)</div>
 
-                      <strong>{irrigando ? "Ligada" : "Desligada"}</strong>
+                      <strong>{irrigando ? "Simulada como ligada" : "Desligada"}</strong>
 
                     </div>
 
@@ -1300,7 +1333,7 @@ function Plantapet({ usuario, aoSair }) {
 
                     >
 
-                      {irrigando ? "Desligar" : "Ligar irrigação"}
+                      {irrigando ? "Encerrar simulação" : "Simular irrigação"}
 
                     </button>
 
@@ -1312,11 +1345,12 @@ function Plantapet({ usuario, aoSair }) {
 
 
 
-                  <div className="status-planta status-planta-ok">
+                  <div className={`status-planta ${sensorConectado ? "status-planta-ok" : "status-planta-aviso"}`} role="status">
 
                     <span>●</span>
 
-                    Sistema funcionando normalmente
+                    {sensorConectado ? "ESP32 conectado" : "Modo de teste: hardware não conectado"}
+
 
                   </div>
 
@@ -1500,13 +1534,16 @@ function Plantapet({ usuario, aoSair }) {
 
           </section>
 
-         <MapaPlantas
-            plantas={plantas}
-            plantaSelecionada={plantaSelecionada}
-            alertaIrrigacao={simularAlertaIrrigacao}
-            aoSimularAlerta={() => setSimularAlertaIrrigacao(true)}
-            aoEncerrarSimulacao={() => setSimularAlertaIrrigacao(false)}
-          />
+
+<MapaPlantas
+  plantas={plantas}
+  plantaSelecionada={plantaSelecionada}
+  aoSelecionarPlanta={selecionarPlanta}
+  alertaIrrigacao={simularAlertaIrrigacao}
+  aoSimularAlerta={() => setSimularAlertaIrrigacao(true)}
+  aoEncerrarSimulacao={() => setSimularAlertaIrrigacao(false)}
+/>
+
           {/* ASSISTENTE FIXO NA LATERAL */}
 
 
